@@ -1,4 +1,5 @@
 import Link from "next/link";
+import MeetupList from "../components/meetups/MeetupList";
 
 function Home() {
   const DUMMY_MEETUPS = [
@@ -30,15 +31,7 @@ function Home() {
 
   return (
     <div>
-      <h1>Welcome to My Page</h1>
-      <p>This is the home page of my website.</p>
-      <ul>
-        <li>
-          <Link href="/news/next-js-is-great-framework">
-            NextJs is Great Framework
-          </Link>
-        </li>
-      </ul>
+      <MeetupList meetups={DUMMY_MEETUPS} />
     </div>
   );
 }
