@@ -1,11 +1,11 @@
 import React from "react";
-import {  useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAuthStore } from "../Store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
 import { useChatStore } from "../Store/useChatStore";
-import Chatheader from "./Chatheader"
+import Chatheader from "./Chatheader";
 import { Link, useNavigate } from "react-router-dom";
-import MiddleContainer from "./MiddleContainer"
+import MiddleContainer from "./MiddleContainer";
 import MessageInput from "./MessageInput";
 
 const Whatsapp = () => {
@@ -21,29 +21,34 @@ const Whatsapp = () => {
   const { authUser } = useAuthStore();
   const [selectedImg, setSelectedImg] = useState(null);
 
-
   useEffect(() => {
-    if (!selectedUser?._id) return;
+    console.log("tahir console", authUser, selectedUser);
+    if (!selectedUser?.id) return;
 
-    getMessages(selectedUser._id);
+    getMessages(selectedUser.id);
 
     subscribeToMessages();
 
     return () => unsubscribeFromMessages();
-  }, [selectedUser?._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
+  }, [
+    selectedUser?.id,
+    getMessages,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+  ]);
 
   useEffect(() => {
     if (messageEndRef.current && messages) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
-  
+
   return (
     <>
       <section className="flex w-screen">
         {/* First container */}
         <div className="sticky top-0 left-0 hidden w-[65px] h-screen border border-y-0 border-l-0 border-r-gray-100 xl:flex flex-col justify-between">
-{/* Upper assets */}
+          {/* Upper assets */}
           <div className="flex flex-col items-center gap-1 mt-2">
             {/* Icon 1  */}
             <div className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
@@ -177,7 +182,7 @@ const Whatsapp = () => {
               />
             </div>
           </div>
-{/* Bottom assets */}
+          {/* Bottom assets */}
           <div className="flex flex-col items-center mb-[10px]">
             {/* Icon 5 */}
             <div className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
@@ -203,17 +208,18 @@ const Whatsapp = () => {
               </svg>
             </div>
             {/* Icon 6 */}
-            <div
-              className=" flex items-center justify-center rounded-full hover:bg-gray-100"
-            >
-                <Link to="/profilepage">             
-                <img src={selectedImg || authUser.profilePhoto || "/avatar.png"} className="w-[50px] h-[50px] rounded-full" alt="" />
-</Link>
-             
+            <div className=" flex items-center justify-center rounded-full hover:bg-gray-100">
+              <Link to="/profilepage">
+                <img
+                  src={selectedImg || authUser.profilePhoto || "/avatar.png"}
+                  className="w-[50px] h-[50px] rounded-full"
+                  alt=""
+                />
+              </Link>
             </div>
           </div>
         </div>
-       <MiddleContainer/>
+        <MiddleContainer />
         {/* First container for small sizes */}
         <div className="fixed border border-t-gray-100 bg-white bottom-0  pt-[15px] pb-[10px] px-[30px] w-screen xl:hidden flex items-center justify-between">
           {/* First icon */}
@@ -324,9 +330,9 @@ const Whatsapp = () => {
           </div>
         </div>
 
-       
-{/* Big right container */}
-         {!selectedUser ? (<section className="hidden xl:block flex-1">
+        {/* Big right container */}
+        {!selectedUser ? (
+          <section className="hidden xl:block flex-1">
             {/* <!-- last container --> */}
             <div className="sticky top-0 h-screen flex flex-col justify-center items-center">
               {/* <!-- whatsapp computer image --> */}
@@ -362,42 +368,43 @@ const Whatsapp = () => {
                 </p>
               </div>
             </div>
-          </section>):(<section className="flex-1 xl:block hidden h-full">
-          <div className="sticky top-0 z-10">
-<Chatheader/>
-</div>
+          </section>
+        ) : (
+          <section className="flex-1 xl:block hidden h-full">
+            <div className="sticky top-0 z-10">
+              <Chatheader />
+            </div>
             {/* Scrolling chat box */}
             <div className=" w-full px-3 pb-[80px] h-screen flex flex-col overflow-y-scroll ">
-             
               {messages.map((message) => (
-          <div
-            key={message._id}
-            className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
-            ref={messageEndRef}
-          >
-            
-            <div className="chat-bubble flex flex-col">
-            {message.image && (
-                <img
-                  src={message.image}
-                  alt="Attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
-                />
-              )}
-              {message.text && <p>{message.text}</p>}
-              <div className="chat-header mb-1 flex justify-end">
-              <time className="text-xs opacity-50 ">
-                {formatMessageTime(message.createdAt)}
-              </time>
+                <div
+                  key={message.id}
+                  className={`chat ${
+                    message.senderId === authUser.id ? "chat-end" : "chat-start"
+                  }`}
+                  ref={messageEndRef}
+                >
+                  <div className="chat-bubble flex flex-col">
+                    {message.image && (
+                      <img
+                        src={message.image}
+                        alt="Attachment"
+                        className="sm:max-w-[200px] rounded-md mb-2"
+                      />
+                    )}
+                    {message.text && <p>{message.text}</p>}
+                    <div className="chat-header mb-1 flex justify-end">
+                      <time className="text-xs opacity-50 ">
+                        {formatMessageTime(message.createdAt)}
+                      </time>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            </div>
-          </div>
-        ))}
-            </div>
-           <MessageInput/>
-          </section>)}
-        
-        
+            <MessageInput />
+          </section>
+        )}
       </section>
     </>
   );

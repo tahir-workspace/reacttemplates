@@ -37,7 +37,7 @@ export const signup = async (req, res) => {
       console.log(useData);
 
       res.status(201).json({
-        _id: useData.id,
+        id: useData.id,
         fullName: useData.fullName,
         email: useData.email,
         profilePhoto: useData.profilePhoto,
@@ -68,7 +68,7 @@ export const login = async (req, res) => {
     generateToken(user.id, res);
 
     res.status(200).json({
-      _id: user.id,
+      id: user.id,
       fullName: user.fullName,
       email: user.email,
       profilePhoto: user.profilePhoto,

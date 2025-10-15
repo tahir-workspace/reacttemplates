@@ -6,7 +6,7 @@ import { getReceiverSocketId, io } from "../lib/socket.js";
 
 export const getUsersForSidebar = async (req, res) => {
   try {
-    const loggedInUserId = req.user._id;
+    const loggedInUserId = req.user.id;
     //const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
 
     const filteredUsers = await User.prismaQuery().findMany({
@@ -34,19 +34,22 @@ export const getUsersForSidebar = async (req, res) => {
 
 export const getMessages = async (req, res) => {
   try {
-    const { id: userToChatId } = req.params;
-    const myId = req.user._id;
+    const userToChatId = parseInt(req.params.id);
+    const myId = parseInt(req.user.id);
 
-    const messages = await Message.find({
-      $or: [
-        { senderId: myId, receiverId: userToChatId },
-        { senderId: userToChatId, receiverId: myId },
-      ],
+    const messages = await Message.prismaQuery().findMany({
+      where: {
+        OR: [
+          { senderId: myId, receiverId: userToChatId },
+          { senderId: userToChatId, receiverId: myId },
+        ],
+      },
+      orderBy: { createdAt: "asc" },
     });
 
     res.status(200).json(messages);
   } catch (error) {
-    console.log("Error in getMessages controller: ", error.message);
+    console.log("Error in getMessages controller:", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -55,7 +58,7 @@ export const sendMessage = async (req, res) => {
   try {
     const { text, image } = req.body;
     const { id: receiverId } = req.params;
-    const senderId = req.user._id;
+    const senderId = req.user.id;
 
     let imageUrl;
     if (image) {
@@ -65,21 +68,32 @@ export const sendMessage = async (req, res) => {
     }
 
     const newMessage = new Message({
-      senderId,
-      receiverId,
+      senderId: parseInt(senderId),
+      receiverId: parseInt(receiverId),
       text,
       image: imageUrl,
     });
 
-    await newMessage.save(); //saving message to database
+    const messageData = await newMessage.save(); //saving message to database
+
+    // newMessage.createdAt = new Date().toISOString();
+    // newMessage.updatedAt = new Date().toISOString();
 
     const receiverSocketId = getReceiverSocketId(receiverId);
+
     if (receiverSocketId) {
       //check if user online then send message
-      io.to(receiverSocketId).emit("newMessage", newMessage);
+      console.log(
+        "Emitting to socket ID:",
+        receiverSocketId,
+        "Message:",
+        newMessage
+      );
+      //io.to(receiverSocketId).emit("newMessage", messageData);
+      console.log(io.emit("newMessage", messageData));
     }
 
-    res.status(201).json(newMessage);
+    res.status(201).json(messageData);
   } catch (error) {
     console.log("Error in sendMessage controller: ", error.message);
     res.status(500).json({ error: "Internal server error" });
