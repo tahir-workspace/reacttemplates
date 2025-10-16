@@ -1,12 +1,12 @@
-
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
-import HomePage from "./pages/HomePage"
-import Chatpage from "./components/Chatpage.jsx"
+import HomePage from "./pages/HomePage";
+import Chatpage from "./components/Chatpage.jsx";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./Store/useAuthStore";
 import { useThemeStore } from "./Store/useThemeStore";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import VideoCall from "./pages/VideoCall.jsx";
 import { useEffect } from "react";
 
 import { Loader } from "lucide-react";
@@ -22,7 +22,7 @@ const App = () => {
     checkAuth();
   }, [checkAuth]);
 
-  console.log({ authUser });
+  console.log("tahir auth", { authUser });
 
   if (isCheckingAuth && !authUser)
     return (
@@ -33,15 +33,33 @@ const App = () => {
 
   return (
     <div data-theme={theme}>
-
       <Routes>
-        <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/signup" />} />
-        <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
-        <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
-        <Route path="/chatpage" element={!authUser ? <LoginPage /> : <Chatpage/>} />
-        <Route path="/profilepage/" element={!authUser ? <LoginPage /> : <ProfilePage/>} />
-
-
+        <Route
+          path="/"
+          element={authUser ? <HomePage /> : <Navigate to="/signup" />}
+        />
+        <Route
+          path="/signup"
+          element={!authUser ? <SignUpPage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/login"
+          element={!authUser ? <LoginPage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/chatpage"
+          element={!authUser ? <LoginPage /> : <Chatpage />}
+        />
+        <Route
+          path="/profilepage/"
+          element={!authUser ? <LoginPage /> : <ProfilePage />}
+        />
+        <Route
+          path="/calling/"
+          element={
+            !authUser ? <LoginPage /> : <VideoCall userId={authUser.id} />
+          }
+        />
       </Routes>
 
       <Toaster />

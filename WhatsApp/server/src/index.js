@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { ExpressPeerServer } from "peer";
+
 //import path from "path";
 
 import authRoutes from "./routes/auth.route.js";
@@ -37,6 +39,12 @@ app.use("/api/messages", messageRoutes);
 //     res.sendFile(path.join(__dirname, "../FRONTEND", "dist", "index.html"));
 //   });
 // }
+
+// === PEERJS SERVER MOUNTED ===
+const peerServer = ExpressPeerServer(server, {
+  path: "/myapp",
+});
+app.use("/peerjs", peerServer);
 
 server.listen(PORT, () => {
   console.log("server is running on PORT:" + PORT);
