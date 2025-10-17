@@ -60,7 +60,7 @@ const MiddleContainer = () => {
             {/* Right assets */}
             <div className="flex gap-3">
               {/* <!-- Right first icon --> */}
-              <div className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
+              {/* <div className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
                 <svg
                   viewBox="0 0 24 24"
                   height="24"
@@ -81,7 +81,7 @@ const MiddleContainer = () => {
                     fill="black"
                   ></path>
                 </svg>
-              </div>
+              </div> */}
               {/* Right second icon */}
               <div
                 onClick={handleLogoutState}
@@ -152,7 +152,7 @@ const MiddleContainer = () => {
           </div>
 
           {/* Message type area */}
-          <div className="flex gap-[8px] xl:mt-[12px] mt-[22px]">
+          {/* <div className="flex gap-[8px] xl:mt-[12px] mt-[22px]">
             <p className="border text-gray-600 flex-1 flex justify-center xl:flex-none rounded-full ml-1 px-[7px] py-[4px] xl:py-[4px] hover:bg-gray-100">
               All
             </p>
@@ -168,7 +168,7 @@ const MiddleContainer = () => {
             <p className="border text-gray-600 flex-1 flex justify-center xl:hidden rounded-full mr-1 px-[7px] py-[4px] xl:py-[4px] hover:bg-gray-100">
               +
             </p>
-          </div>
+          </div> */}
         </div>
 
         {/* Chats area for laptop */}
@@ -212,7 +212,7 @@ const MiddleContainer = () => {
             ))}
           </div>
 
-          <div className="flex justify-center mt-4">
+          {/* <div className="flex justify-center mt-4">
             <svg
               viewBox="0 0 24 24"
               height="20"
@@ -234,7 +234,7 @@ const MiddleContainer = () => {
                 end-to-end encrypted
               </span>
             </p>
-          </div>
+          </div> */}
         </div>
 
         {/* Chats area for phone */}

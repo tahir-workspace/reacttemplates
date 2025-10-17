@@ -67,13 +67,13 @@ const SignUpPage = () => {
             <label className="label">
               <span className="label-text font-medium">Full Name</span>
             </label>
-            <div className="relative">
+            <div className="relative  mt-2">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <User className="size-5 text-base-content/40" />
               </div>
               <input
                 type="text"
-                className={`input input-bordered w-full pl-10`}
+                className={`input input-bordered w-full pl-2`}
                 placeholder="Enter Your Name"
                 value={formData.fullName}
                 onChange={(e) =>
@@ -84,16 +84,16 @@ const SignUpPage = () => {
           </div>
 
           <div className="form-control">
-            <label className="label">
+            <label className="label ">
               <span className="label-text font-medium">Email</span>
             </label>
-            <div className="relative">
+            <div className="relative mt-2">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Mail className="size-5 text-base-content/40" />
               </div>
               <input
                 type="email"
-                className={`input input-bordered w-full pl-10`}
+                className={`input input-bordered w-full pl-2`}
                 placeholder="you@example.com"
                 value={formData.email}
                 onChange={(e) =>
@@ -107,13 +107,13 @@ const SignUpPage = () => {
             <label className="label">
               <span className="label-text font-medium">Password</span>
             </label>
-            <div className="relative">
+            <div className="relative  mt-2">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Lock className="size-5 text-base-content/40" />
               </div>
               <input
                 type={showPassword ? "text" : "password"}
-                className={`input input-bordered w-full pl-10`}
+                className={`input input-bordered w-full pl-2`}
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={(e) =>

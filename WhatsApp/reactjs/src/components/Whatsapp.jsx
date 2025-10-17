@@ -70,7 +70,7 @@ const Whatsapp = () => {
               </svg>
             </div>
             {/* Icon 2 */}
-            <div className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
+            {/* <div className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
               <svg
                 viewBox="0 0 24 24"
                 height="24"
@@ -99,9 +99,9 @@ const Whatsapp = () => {
                   fill="currentColor"
                 ></path>
               </svg>
-            </div>
+            </div> */}
             {/* Icon 3 */}
-            <div className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
+            {/* <div className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
               <svg
                 viewBox="0 0 24 24"
                 height="24"
@@ -128,9 +128,9 @@ const Whatsapp = () => {
                   fill="currentColor"
                 ></path>
               </svg>
-            </div>
+            </div> */}
             {/* Icon 4       */}
-            <div className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
+            {/* <div className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
               <svg
                 viewBox="0 0 32 32"
                 height="32"
@@ -173,19 +173,19 @@ const Whatsapp = () => {
                   fill="currentColor"
                 ></path>
               </svg>
-            </div>
-            <div className="mt-[10px] mb-[10px] w-10 border border-black"></div>
+            </div> */}
+            {/* <div className="mt-[10px] mb-[10px] w-10 border border-black"></div>
             <div className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
               <img
                 className="w-[20px] h-[20px]"
                 src="https://static.whatsapp.net/rsrc.php/v4/ye/r/W2MDyeo0zkf.png"
               />
-            </div>
+            </div> */}
           </div>
           {/* Bottom assets */}
           <div className="flex flex-col items-center mb-[10px]">
             {/* Icon 5 */}
-            <div className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
+            {/* <div className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
               <svg
                 viewBox="0 0 24 24"
                 height="24"
@@ -206,7 +206,7 @@ const Whatsapp = () => {
                   fill="black"
                 ></path>
               </svg>
-            </div>
+            </div> */}
             {/* Icon 6 */}
             <div className=" flex items-center justify-center rounded-full hover:bg-gray-100">
               <Link to="/profilepage">

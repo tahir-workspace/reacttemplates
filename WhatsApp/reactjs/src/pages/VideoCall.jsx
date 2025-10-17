@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Peer } from "peerjs";
+import CallScreen from "../components/CallScreen.jsx";
 
 // Ringtone assets (replace with your own)
 const incomingRingUrl = "/sounds/incoming.mp3";
@@ -8,11 +9,12 @@ const outgoingRingUrl = "/sounds/outgoing.mp3";
 const VideoCall = ({ userId }) => {
   const [myPeerId, setMyPeerId] = useState("");
   const [remotePeerId, setRemotePeerId] = useState("");
+  const [isStreaming, setIsStreaming] = useState(false);
   const [incomingCall, setIncomingCall] = useState(null);
   const [callActive, setCallActive] = useState(false);
   const [videoEnabled, setVideoEnabled] = useState(true);
   const [audioEnabled, setAudioEnabled] = useState(true);
-  const [rejectInfo, setRejectInfo] = useState(null); // 💬 For reject popup
+  const [rejectInfo, setRejectInfo] = useState(null);
   const [callerInfo, setCallerInfo] = useState(null);
 
   const localVideoRef = useRef(null);
@@ -37,11 +39,11 @@ const VideoCall = ({ userId }) => {
       setMyPeerId(id);
     });
 
-    // ✅ Handle data events (reject/end)
+    // Handle data events (reject/end)
     peer.on("connection", (conn) => {
-      console.log("🔗 Data connection with:", conn.peer);
+      console.log("Data connection with:", conn.peer);
       conn.on("data", (data) => {
-        console.log("📩 Received data:", data);
+        console.log("Received data:", data);
         if (data.type === "reject") {
           stopAllSounds();
           endCall();
@@ -52,7 +54,7 @@ const VideoCall = ({ userId }) => {
           });
         }
         if (data.type === "end") {
-          console.log("📴 Call ended by remote user");
+          console.log("Call ended by remote user");
           stopAllSounds();
           endCall();
         }
@@ -61,7 +63,7 @@ const VideoCall = ({ userId }) => {
 
     // Handle incoming calls
     peer.on("call", (call) => {
-      console.log("📞 Incoming call metadata:", call.metadata);
+      console.log("Incoming call metadata:", call.metadata);
       setRemotePeerId(call.metadata.userId);
 
       setCallerInfo({
@@ -88,7 +90,7 @@ const VideoCall = ({ userId }) => {
 
   // ==== Handle Peer Disconnect ====
   const handlePeerDisconnect = () => {
-    console.log("🔌 Peer disconnected");
+    console.log("Peer disconnected");
     endCall();
   };
 
@@ -141,6 +143,7 @@ const VideoCall = ({ userId }) => {
 
     call.on("stream", (remoteStream) => {
       stopAllSounds();
+      setIsStreaming(true);
       remoteVideoRef.current.srcObject = remoteStream;
       remoteVideoRef.current.muted = false;
       remoteVideoRef.current.volume = 1.0;
@@ -148,12 +151,12 @@ const VideoCall = ({ userId }) => {
     });
 
     call.on("close", () => {
-      console.log("📴 Call closed by remote");
+      console.log("Call closed by remote");
       endCall();
     });
 
     call.on("error", (err) => {
-      console.log("❌ Call error:", err);
+      console.log("Call error:", err);
       endCall();
     });
 
@@ -180,6 +183,7 @@ const VideoCall = ({ userId }) => {
 
     incomingCall.on("stream", (remoteStream) => {
       stopAllSounds();
+      setIsStreaming(true);
       remoteVideoRef.current.srcObject = remoteStream;
       remoteVideoRef.current.muted = false;
       remoteVideoRef.current.volume = 1.0;
@@ -199,6 +203,7 @@ const VideoCall = ({ userId }) => {
     stopAllSounds();
     if (currentCall.current) currentCall.current.close();
 
+    setIsStreaming(false);
     setCallActive(false);
     setIncomingCall(null);
 
@@ -265,10 +270,6 @@ const VideoCall = ({ userId }) => {
 
   return (
     <div className="flex flex-col items-center p-6">
-      <h2 className="text-2xl font-semibold mb-2">
-        PeerJS Video Call (No Socket)
-      </h2>
-
       <p className="text-gray-700 mb-2">
         <strong>Your ID:</strong> {myPeerId || "Connecting..."}
       </p>
@@ -295,108 +296,95 @@ const VideoCall = ({ userId }) => {
         </button>
       </div>
 
-      {/* Video Panels */}
-      <div className="flex gap-6">
-        {/* Local video */}
-        <div>
-          <p className="text-center text-sm text-gray-500 mb-1">You</p>
-          <video
-            ref={localVideoRef}
-            muted
-            playsInline
-            className="w-64 h-48 bg-black rounded"
-          />
-          <div className="flex justify-center gap-2 mt-2">
-            <button
-              onClick={toggleVideo}
-              className={`px-3 py-1 rounded ${
-                videoEnabled ? "bg-green-600" : "bg-gray-500"
-              } text-white text-sm`}
-            >
-              {videoEnabled ? "Camera On" : "Camera Off"}
-            </button>
-            <button
-              onClick={toggleAudio}
-              className={`px-3 py-1 rounded ${
-                audioEnabled ? "bg-green-600" : "bg-gray-500"
-              } text-white text-sm`}
-            >
-              {audioEnabled ? "Mic On" : "Mic Off"}
-            </button>
-          </div>
-        </div>
-
-        {/* Remote video */}
-        <div>
-          <p className="text-center text-sm text-gray-500 mb-1">Remote</p>
-          <video
-            ref={remoteVideoRef}
-            playsInline
-            autoPlay
-            className="w-64 h-48 bg-black rounded"
-          />
-        </div>
-      </div>
-
       {/* Incoming Call Popup */}
       {incomingCall && callerInfo && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
-          <div className="bg-white p-6 rounded-xl shadow-lg text-center w-80">
-            <img
-              src={callerInfo.callerAvatar || "/default-avatar.png"}
-              alt={callerInfo.callerName || "Caller"}
-              className="w-20 h-20 rounded-full mx-auto mb-3 border-2 border-gray-300 object-cover"
-            />
-            <h3 className="text-lg font-semibold mb-1 text-gray-800">
-              {callerInfo.callerName || "Unknown User"} is calling 📞
-            </h3>
-            <p className="mb-4 text-gray-600 italic">
-              “{callerInfo.reason || "Incoming video call..."}”
-            </p>
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={acceptCall}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
-              >
-                Accept
-              </button>
-              <button
-                onClick={rejectCall}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
-              >
-                Reject
-              </button>
-            </div>
-          </div>
-        </div>
+        <CallScreen
+          title={callerInfo.reason}
+          callerName={callerInfo.callerName}
+          callerImage={callerInfo.callerAvatar}
+          onAccept={acceptCall}
+          onReject={rejectCall}
+        />
+      )}
+
+      {/* Calling Call Popup */}
+      {!isStreaming && callActive && (
+        <CallScreen
+          title="Calling..."
+          callerName={"Leonardo DiCaprio"}
+          callerImage={"https://i.pravatar.cc/100?u=leonardo"}
+          onReject={endCall}
+          rejectText="Hang Up"
+        />
       )}
 
       {/* Rejection Popup */}
       {rejectInfo && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
-          <div className="bg-white p-6 rounded-xl shadow-lg text-center max-w-sm">
-            <img
-              src={rejectInfo.avatar}
-              alt="avatar"
-              className="w-20 h-20 mx-auto rounded-full mb-3"
-            />
-            <h3 className="text-xl font-semibold mb-2">
-              {rejectInfo.name} rejected your call
-            </h3>
-            <p className="text-gray-600 mb-4">{rejectInfo.reason}</p>
-            <button
-              onClick={() => setRejectInfo(null)}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-              OK
-            </button>
-          </div>
-        </div>
+        <CallScreen
+          title="Call Rejected"
+          callerName={rejectInfo.name}
+          callerImage={rejectInfo.avatar}
+          onReject={() => setRejectInfo(null)}
+          rejectText="Close"
+        />
       )}
 
-      {callActive && (
-        <p className="text-green-600 font-semibold mt-3">Call Active ✅</p>
-      )}
+      {/* Video Panels */}
+
+      <div
+        className="relative w-full h-screen bg-black overflow-hidden"
+        style={{ display: isStreaming ? "block" : "none" }}
+      >
+        {/* Remote video (full screen) */}
+        <video
+          ref={remoteVideoRef}
+          playsInline
+          autoPlay
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+
+        {/* Local video (small preview, top-right corner) */}
+        <div className="absolute top-4 right-4 w-32 h-24 border-2 border-white rounded-lg overflow-hidden shadow-lg">
+          <video
+            ref={localVideoRef}
+            muted
+            playsInline
+            autoPlay
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Control buttons (bottom center) */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-4">
+          {/* Toggle Video */}
+          <button
+            onClick={toggleVideo}
+            className={`px-4 py-2 rounded-full ${
+              videoEnabled ? "bg-green-600" : "bg-gray-600"
+            } text-white text-sm`}
+          >
+            {videoEnabled ? "Camera On" : "Camera Off"}
+          </button>
+
+          {/* Toggle Audio */}
+          <button
+            onClick={toggleAudio}
+            className={`px-4 py-2 rounded-full ${
+              audioEnabled ? "bg-green-600" : "bg-gray-600"
+            } text-white text-sm`}
+          >
+            {audioEnabled ? "Mic On" : "Mic Off"}
+          </button>
+
+          {/* End Call */}
+          <button
+            onClick={endCall}
+            className="px-4 py-2 rounded-full bg-red-600 text-white text-sm"
+          >
+            End
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
