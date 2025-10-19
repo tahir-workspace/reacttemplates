@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import { useState, useRef, useEffect } from "react";
 import { useAuthStore } from "../Store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
@@ -7,6 +7,7 @@ import Chatheader from "./Chatheader";
 import { Link, useNavigate } from "react-router-dom";
 import MiddleContainer from "./MiddleContainer";
 import MessageInput from "./MessageInput";
+import VideoCall from "../pages/VideoCall";
 
 const Whatsapp = () => {
   const {
@@ -20,6 +21,8 @@ const Whatsapp = () => {
   const navigate = useNavigate();
   const { authUser } = useAuthStore();
   const [selectedImg, setSelectedImg] = useState(null);
+  const [callingfunc, setCallingfunc] = useState(null);
+  const [remoteId, setRemoteId] = useState("");
 
   useEffect(() => {
     console.log("tahir console", authUser, selectedUser);
@@ -372,7 +375,7 @@ const Whatsapp = () => {
         ) : (
           <section className="flex-1 xl:block hidden h-full">
             <div className="sticky top-0 z-10">
-              <Chatheader />
+              <Chatheader setRemoteId={setRemoteId} callingfunc={callingfunc} />
             </div>
             {/* Scrolling chat box */}
             <div className=" w-full px-3 pb-[80px] h-screen flex flex-col overflow-y-scroll ">
@@ -406,6 +409,13 @@ const Whatsapp = () => {
           </section>
         )}
       </section>
+      <VideoCall
+        userId={authUser?.id.toString()}
+        userName={authUser?.fullName}
+        userProfile={authUser.profilePhoto || "/avatar.png"}
+        callingfunc={setCallingfunc}
+        remoteId={remoteId}
+      />
     </>
   );
 };

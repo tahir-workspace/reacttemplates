@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { Peer } from "peerjs";
 import CallScreen from "../components/CallScreen.jsx";
 
@@ -6,7 +6,13 @@ import CallScreen from "../components/CallScreen.jsx";
 const incomingRingUrl = "/sounds/incoming.mp3";
 const outgoingRingUrl = "/sounds/outgoing.mp3";
 
-const VideoCall = ({ userId }) => {
+const VideoCall = ({
+  userId,
+  userName = "User Name",
+  userProfile = "/avatar.png",
+  remoteId = "",
+  callingfunc,
+}) => {
   const [myPeerId, setMyPeerId] = useState("");
   const [remotePeerId, setRemotePeerId] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
@@ -24,66 +30,115 @@ const VideoCall = ({ userId }) => {
   const localStreamRef = useRef(null);
   const incomingAudioRef = useRef(null);
   const outgoingAudioRef = useRef(null);
+  const debug = false;
+
+  useEffect(() => {
+    setRemotePeerId(remoteId.toString() || "");
+  }, [remoteId]);
+
+  useEffect(() => {
+    callingfunc({
+      startCall,
+      endCall,
+    });
+  }, [callingfunc]);
 
   // ==== INITIAL SETUP ====
   useEffect(() => {
-    const peer = new Peer(userId, {
-      host: "localhost",
-      port: 5001,
-      path: "/peerjs/myapp",
-    });
-    peerRef.current = peer;
+    if (!userId) return;
 
-    peer.on("open", (id) => {
-      console.log("Peer connected:", id);
-      setMyPeerId(id);
-    });
-
-    // Handle data events (reject/end)
-    peer.on("connection", (conn) => {
-      console.log("Data connection with:", conn.peer);
-      conn.on("data", (data) => {
-        console.log("Received data:", data);
-        if (data.type === "reject") {
-          stopAllSounds();
-          endCall();
-          setRejectInfo({
-            name: data.name,
-            avatar: data.avatar,
-            reason: data.reason,
-          });
+    // Helper to create a peer safely
+    const createPeer = async (idToUse) => {
+      // Destroy any existing peer before reconnecting
+      if (peerRef.current) {
+        try {
+          peerRef.current.destroy();
+          console.log("🧹 Old peer destroyed before reconnecting");
+        } catch (e) {
+          console.warn("Failed to destroy old peer:", e);
         }
-        if (data.type === "end") {
-          console.log("Call ended by remote user");
-          stopAllSounds();
-          endCall();
-        }
-      });
-    });
+        await new Promise((r) => setTimeout(r, 300)); // wait for cleanup
+      }
 
-    // Handle incoming calls
-    peer.on("call", (call) => {
-      console.log("Incoming call metadata:", call.metadata);
-      setRemotePeerId(call.metadata.userId);
+      console.log("🔌 Creating peer with ID:", idToUse);
 
-      setCallerInfo({
-        callerName: call.metadata?.name || "Unknown User",
-        callerAvatar:
-          call.metadata?.avatar ||
-          "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-        reason: call.metadata?.reason || "Incoming video call...",
+      const peer = new Peer(idToUse, {
+        host: "localhost",
+        port: 5001,
+        path: "/peerjs/myapp",
       });
 
-      setIncomingCall(call);
-      playIncomingRingtone();
-    });
+      peerRef.current = peer;
 
-    peer.on("disconnected", handlePeerDisconnect);
-    peer.on("close", handlePeerDisconnect);
-    peer.on("error", handlePeerDisconnect);
+      peer.on("open", (id) => {
+        console.log("✅ Peer connected:", id);
+        setMyPeerId(id);
+      });
 
+      // Handle incoming data connections
+      peer.on("connection", (conn) => {
+        console.log("Data connection with:", conn.peer);
+        conn.on("data", (data) => {
+          console.log("Received data:", data);
+
+          if (data.type === "reject") {
+            stopAllSounds();
+            endCall();
+            setRejectInfo({
+              name: data.name,
+              avatar: data.avatar,
+              reason: data.reason,
+            });
+          }
+
+          if (data.type === "end") {
+            console.log("Call ended by remote user");
+            stopAllSounds();
+            endCall();
+          }
+        });
+      });
+
+      // Handle incoming call
+      peer.on("call", (call) => {
+        console.log("Incoming call metadata:", call.metadata);
+        setRemotePeerId(call.metadata.userId);
+
+        setCallerInfo({
+          callerName: call.metadata?.name || "Unknown User",
+          callerAvatar:
+            call.metadata?.avatar ||
+            "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+          reason: call.metadata?.reason || "Incoming video call...",
+        });
+
+        setIncomingCall(call);
+        playIncomingRingtone();
+      });
+
+      // Handle disconnect / close
+      peer.on("disconnected", handlePeerDisconnect);
+      peer.on("close", handlePeerDisconnect);
+
+      // Handle errors — retry if ID is taken
+      peer.on("error", (err) => {
+        console.error("PeerJS error:", err);
+
+        if (err.type === "unavailable-id") {
+          console.warn("ID already taken — retrying...");
+          peer.destroy();
+          setTimeout(() => createPeer(idToUse), 500); // retry after short delay
+        }
+      });
+    };
+
+    // Start peer
+    createPeer(userId);
+
+    // Cleanup
     return () => {
-      peer.destroy();
+      console.log("🧹 Cleaning up peer...");
+      peerRef.current?.destroy();
       stopAllSounds();
     };
   }, [userId]);
@@ -119,7 +174,7 @@ const VideoCall = ({ userId }) => {
   };
 
   // ==== START CALL ====
-  const startCall = async () => {
+  const startCall = async (remotePeerId) => {
     if (!remotePeerId) return alert("Enter a valid user ID!");
 
     playOutgoingRingtone();
@@ -211,7 +266,7 @@ const VideoCall = ({ userId }) => {
       localStreamRef.current.getTracks().forEach((t) => t.stop());
     }
 
-    // 🔥 Notify remote via PeerJS
+    //Notify remote via PeerJS
     if (remotePeerId && peerRef.current) {
       const conn = peerRef.current.connect(remotePeerId);
       conn.on("open", () => conn.send({ type: "end" }));
@@ -269,32 +324,50 @@ const VideoCall = ({ userId }) => {
   };
 
   return (
-    <div className="flex flex-col items-center p-6">
-      <p className="text-gray-700 mb-2">
-        <strong>Your ID:</strong> {myPeerId || "Connecting..."}
-      </p>
+    <div
+      className=""
+      style={
+        callActive || incomingCall || rejectInfo
+          ? {
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 1000,
+            }
+          : {}
+      }
+    >
+      {debug && (
+        <>
+          <p className="text-gray-700 mb-2">
+            <strong>Your ID:</strong> {myPeerId || "Connecting..."}
+          </p>
 
-      <div className="flex gap-2 mb-4">
-        <input
-          type="text"
-          placeholder="Enter user ID to call"
-          value={remotePeerId}
-          onChange={(e) => setRemotePeerId(e.target.value)}
-          className="border p-2 rounded w-72"
-        />
-        <button
-          onClick={startCall}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Call
-        </button>
-        <button
-          onClick={endCall}
-          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-        >
-          End
-        </button>
-      </div>
+          <div className="flex gap-2 mb-4">
+            <input
+              type="text"
+              placeholder="Enter user ID to call"
+              value={remotePeerId}
+              onChange={(e) => setRemotePeerId(e.target.value)}
+              className="border p-2 rounded w-72"
+            />
+            <button
+              onClick={startCall}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Call
+            </button>
+            <button
+              onClick={endCall}
+              className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+            >
+              End
+            </button>
+          </div>
+        </>
+      )}
 
       {/* Incoming Call Popup */}
       {incomingCall && callerInfo && (
@@ -340,7 +413,7 @@ const VideoCall = ({ userId }) => {
           ref={remoteVideoRef}
           playsInline
           autoPlay
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-contain"
         />
 
         {/* Local video (small preview, top-right corner) */}
