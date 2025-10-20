@@ -63,7 +63,7 @@ const Chatpage = () => {
   }, [messages]);
 
   return (
-    <section className="flex-1 block xl:hidden h-screen overflow-y-scroll">
+    <section className="flex-1 block xl:hidden h-screen overflow-y-auto">
       <div className="sticky top-0 z-10">
         {/* Chatheader Area of Scrolling box */}
         <div className="flex justify-between items-center pl-[15px] pt-[10px] pb-[10px] bg-white z-10">
@@ -159,7 +159,7 @@ const Chatpage = () => {
         </div>
       </div>
       {/* scrolling chat box */}
-      <div className="w-full px-3 pb-[80px] flex flex-col justify-end overflow-y-scroll ">
+      <div className="w-full px-3 pb-[80px] flex flex-col justify-end overflow-y-auto ">
         {messages.map((message) => (
           <div
             key={message.id}

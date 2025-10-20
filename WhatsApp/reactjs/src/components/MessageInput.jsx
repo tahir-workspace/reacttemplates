@@ -106,9 +106,9 @@ const MessageInput = () => {
       <form onSubmit={handleSendMessage}>
         <div className="relative">
           {/* Emoji icon */}
-          <div className="absolute left-12 top-1/2 -translate-y-1/2 text-gray-500 w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
+          {/* <div className="absolute left-12 top-1/2 -translate-y-1/2 text-gray-500 w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
             😊
-          </div>
+          </div> */}
 
           {/* Image picker */}
           <div
@@ -145,7 +145,8 @@ const MessageInput = () => {
             onChange={(e) => setText(e.target.value)}
             type="text"
             value={text}
-            className="h-[55px] pl-[95px] pr-[50px] border w-[925px] rounded-full"
+            className="h-[55px] pl-[55px] pr-[50px] border wd-[925px] rounded-full"
+            style={{ width: "calc(100vw - 520px)" }}
             placeholder={isRecording ? "Recording..." : "Type a message"}
             disabled={isRecording}
           />

@@ -17,6 +17,7 @@ const MiddleContainer = () => {
   const { logout } = useAuthStore();
 
   const [isLogout, setIsLogout] = useState(false);
+  const [srch, setSrch] = useState("");
 
   const handleLogoutState = () => {
     setIsLogout(!isLogout);
@@ -26,14 +27,26 @@ const MiddleContainer = () => {
     setShowOnlineOnly(!showOnlineOnly);
   };
 
-  const filteredUsers = showOnlineOnly
-    ? users.filter((user) => onlineUsers.includes(user.id))
-    : users;
+  const filteredUsers = users.filter((user) => {
+    const isOnline = onlineUsers.includes(user.id);
+    const matchesSearch =
+      srch === "" ||
+      user.fullName?.toLowerCase().includes(srch.toLowerCase()) ||
+      user.email?.toLowerCase().includes(srch.toLowerCase());
+
+    if (showOnlineOnly) {
+      return isOnline && matchesSearch;
+    }
+    return matchesSearch;
+  });
+
+  console.log("Users:", users);
+  console.log("Online users:", onlineUsers);
 
   return (
     <>
       {/* Middle container */}
-      <div className="sticky top-0 h-screen overflow-y-scroll pb-[200px] w-screen xl:w-[430px] border border-l-0 border-r-gray-100 border-y-0">
+      <div className="sticky top-0 h-screen overflow-y-auto pb-[200px] w-screen xl:w-[430px] border border-l-0 border-r-gray-100 border-y-0">
         {/* Upper container */}
         <div className="sticky top-0 bg-white border border-x-0 border-t-0 border-b-gray-100 pt-4 pb-[5px] px-3">
           {/* Upper bar */}
@@ -147,6 +160,7 @@ const MiddleContainer = () => {
                 className="bg-gray-100 w-full h-[40px] rounded-full pl-10 border"
                 type="text"
                 placeholder="Search or start a new chat"
+                onKeyUp={(e) => setSrch(e.target.value)}
               />
             </form>
           </div>
@@ -172,7 +186,7 @@ const MiddleContainer = () => {
         </div>
 
         {/* Chats area for laptop */}
-        <div className="xl:flex flex-col overflow-y-scroll hidden ml-2 mr-2 bg-white">
+        <div className="xl:flex flex-col overflow-y-auto hidden ml-2 mr-2 bg-white">
           {/* <!-- cards area --> */}
           <div className="flex-1">
             {/* <!-- card 1 --> */}
@@ -238,7 +252,7 @@ const MiddleContainer = () => {
         </div>
 
         {/* Chats area for phone */}
-        <div className="xl:hidden flex flex-col overflow-y-scroll ml-2 mr-2 bg-white">
+        <div className="xl:hidden flex flex-col overflow-y-auto ml-2 mr-2 bg-white">
           {/* Cards area */}
           <div className="flex-1">
             {/* Card 1 */}
@@ -278,7 +292,7 @@ const MiddleContainer = () => {
               </Link>
             ))}
           </div>
-          <div className="flex justify-center mt-4">
+          {/* <div className="flex justify-center mt-4">
             <svg
               viewBox="0 0 24 24"
               height="20"
@@ -300,7 +314,7 @@ const MiddleContainer = () => {
                 end-to-end encrypted
               </span>
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

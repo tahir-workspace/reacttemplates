@@ -351,7 +351,7 @@ const Whatsapp = () => {
                 Get from App Store
               </button>
               {/* <!-- footer line --> */}
-              <div className="absolute bottom-10 flex items-center">
+              {/* <div className="absolute bottom-10 flex items-center">
                 <svg
                   viewBox="0 0 24 24"
                   height="20"
@@ -369,7 +369,7 @@ const Whatsapp = () => {
                 <p className="text-sm">
                   Your personal messages are end-to-end encrypted
                 </p>
-              </div>
+              </div> */}
             </div>
           </section>
         ) : (
@@ -378,7 +378,10 @@ const Whatsapp = () => {
               <Chatheader setRemoteId={setRemoteId} callingfunc={callingfunc} />
             </div>
             {/* Scrolling chat box */}
-            <div className=" w-full px-3 pb-[80px] h-screen flex flex-col overflow-y-scroll ">
+            <div
+              className=" w-full px-3 pb-[80px] flex flex-col overflow-y-auto "
+              style={{ height: "90vh" }}
+            >
               {messages.map((message) => (
                 <div
                   key={message.id}

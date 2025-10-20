@@ -22,7 +22,7 @@ const ChatContainer = () => {
           <Chatheader />
         </div>
         {/* Scrolling chat box */}
-        <div className=" w-full px-3 pb-[80px] flex flex-col overflow-y-scroll ">
+        <div className=" w-full px-3 pb-[80px] flex flex-col overflow-y-auto ">
           {messages.map((message) => (
             <div
               key={message.id}
