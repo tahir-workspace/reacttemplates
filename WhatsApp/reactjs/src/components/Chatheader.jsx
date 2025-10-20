@@ -52,6 +52,13 @@ const Chatheader = ({ setRemoteId, callingfunc }) => {
               style={{ cursor: "pointer" }}
               onClick={() => {
                 setRemoteId(selectedUser?.id.toString());
+                callingfunc?.setCallerInfo({
+                  callerName: selectedUser?.fullName || "Unknown User",
+                  callerAvatar:
+                    selectedUser?.profilePhoto ||
+                    "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+                  reason: "Calling...",
+                });
                 setTimeout(function () {
                   callingfunc?.startCall(selectedUser?.id.toString());
                 }, 200);
@@ -90,6 +97,27 @@ const Chatheader = ({ setRemoteId, callingfunc }) => {
           {/* <!-- magnifying icon & three dots box --> */}
           <div className="flex gap-[20px]">
             {/* <!-- magnifying icon --> */}
+            <a
+              onClick={() => setSelectedUser(null)}
+              style={{ cursor: "pointer" }}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                height="24"
+                width="24"
+                preserveAspectRatio="xMidYMid meet"
+                fill="none"
+              >
+                <title>close</title>
+                <path
+                  d="M6 6L18 18M6 18L18 6"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></path>
+              </svg>
+            </a>
             {/* <svg
               viewBox="0 0 24 24"
               height="24"
@@ -105,7 +133,7 @@ const Chatheader = ({ setRemoteId, callingfunc }) => {
               ></path>
             </svg> */}
             {/* <!-- three dots icon --> */}
-            <div onClick={() => setIsDropdownOpen((prev) => !prev)}>
+            {/* <div onClick={() => setIsDropdownOpen((prev) => !prev)}>
               <svg
                 viewBox="0 0 24 24"
                 height="24"
@@ -141,7 +169,7 @@ const Chatheader = ({ setRemoteId, callingfunc }) => {
                   )}
                 </ul>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import MiddleContainer from "./MiddleContainer";
 import MessageInput from "./MessageInput";
 import VideoCall from "../pages/VideoCall";
+import Navbar from "./Navbar";
 
 const Whatsapp = () => {
   const {
@@ -224,114 +225,7 @@ const Whatsapp = () => {
         </div>
         <MiddleContainer />
         {/* First container for small sizes */}
-        <div className="fixed border border-t-gray-100 bg-white bottom-0  pt-[15px] pb-[10px] px-[30px] w-screen xl:hidden flex items-center justify-between">
-          {/* First icon */}
-          <div className="flex gap-2.5 flex-col items-center">
-            <svg
-              viewBox="0 0 24 24"
-              height="24"
-              width="24"
-              preserveAspectRatio="xMidYMid meet"
-              className=""
-              fill="none"
-            >
-              <title>chat-filled-refreshed</title>
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M22.0002 6.66667C22.0002 5.19391 20.8062 4 19.3335 4H1.79015C1.01286 4 0.540213 4.86348 0.940127 5.53L3.00016 9V17.3333C3.00016 18.8061 4.19406 20 5.66682 20H19.3335C20.8062 20 22.0002 18.8061 22.0002 17.3333V6.66667ZM7.00016 10C7.00016 9.44772 7.44787 9 8.00016 9H17.0002C17.5524 9 18.0002 9.44772 18.0002 10C18.0002 10.5523 17.5524 11 17.0002 11H8.00016C7.44787 11 7.00016 10.5523 7.00016 10ZM8.00016 13C7.44787 13 7.00016 13.4477 7.00016 14C7.00016 14.5523 7.44787 15 8.00016 15H14.0002C14.5524 15 15.0002 14.5523 15.0002 14C15.0002 13.4477 14.5524 13 14.0002 13H8.00016Z"
-                fill="black"
-              ></path>
-            </svg>
-            <p className="text-sm font-semibold">Chats</p>
-          </div>
-          {/* <!-- Second icon  --> */}
-          <div
-            onClick={() => navigate("/update")}
-            className="flex gap-2.5 flex-col items-center"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              height="24"
-              width="24"
-              preserveAspectRatio="xMidYMid meet"
-              className=""
-              fill="none"
-            >
-              <title>status-refreshed</title>
-              <path
-                d="M13.5628 3.13661C13.6587 2.59272 14.1794 2.22464 14.711 2.37436C15.7905 2.6784 16.8135 3.16254 17.736 3.80856C18.9323 4.64623 19.9305 5.73573 20.6606 7.00048C21.3907 8.26524 21.8349 9.67455 21.962 11.1294C22.0601 12.2513 21.9677 13.3794 21.6911 14.4662C21.5549 15.0014 20.9758 15.2682 20.4568 15.0792C19.9378 14.8903 19.677 14.317 19.7998 13.7785C19.9843 12.9693 20.0422 12.1343 19.9696 11.3035C19.8679 10.1396 19.5126 9.01217 18.9285 8.00036C18.3444 6.98856 17.5458 6.11696 16.5888 5.44682C15.9057 4.96842 15.1536 4.60099 14.3606 4.35609C13.8329 4.19312 13.4669 3.6805 13.5628 3.13661Z"
-                fill="currentColor"
-              ></path>
-              <path
-                d="M18.8944 17.785C19.3175 18.14 19.3759 18.7749 18.9804 19.1604C18.1774 19.9433 17.2466 20.5872 16.2259 21.0631C14.9023 21.6802 13.4597 22 11.9993 21.9999C10.5389 21.9998 9.09633 21.6798 7.77287 21.0625C6.7522 20.5864 5.82149 19.9424 5.01855 19.1594C4.62314 18.7739 4.68167 18.1389 5.10479 17.784C5.52792 17.4291 6.15484 17.4898 6.55976 17.8654C7.16828 18.4298 7.86245 18.8974 8.61829 19.25C9.67707 19.7438 10.8312 19.9998 11.9994 19.9999C13.1677 20 14.3218 19.7442 15.3807 19.2505C16.1366 18.898 16.8308 18.4304 17.4394 17.8661C17.8444 17.4906 18.4713 17.43 18.8944 17.785Z"
-                fill="currentColor"
-              ></path>
-              <path
-                d="M3.54277 15.0781C3.02379 15.267 2.4447 15.0001 2.30857 14.4649C2.03215 13.3781 1.9399 12.2501 2.03806 11.1283C2.16533 9.6736 2.60965 8.26443 3.33978 6.99982C4.06991 5.73521 5.06815 4.64585 6.26432 3.8083C7.1868 3.16239 8.20975 2.67832 9.28915 2.37433C9.82075 2.22461 10.3414 2.59269 10.4373 3.13659C10.5332 3.68048 10.1672 4.1931 9.6395 4.35605C8.84657 4.60092 8.09458 4.9683 7.41146 5.44662C6.45452 6.11666 5.65593 6.98815 5.07183 7.99983C4.48772 9.01152 4.13226 10.1389 4.03045 11.3026C3.95776 12.1334 4.01559 12.9683 4.19998 13.7774C4.3227 14.3159 4.06175 14.8892 3.54277 15.0781Z"
-                fill="currentColor"
-              ></path>
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M12.0001 16C14.2092 16 16.0001 14.2091 16.0001 12C16.0001 9.79086 14.2092 8 12.0001 8C9.79092 8 8.00006 9.79086 8.00006 12C8.00006 14.2091 9.79092 16 12.0001 16ZM12.0001 18C15.3138 18 18.0001 15.3137 18.0001 12C18.0001 8.68629 15.3138 6 12.0001 6C8.68635 6 6.00006 8.68629 6.00006 12C6.00006 15.3137 8.68635 18 12.0001 18Z"
-                fill="black"
-              ></path>
-            </svg>
-            <p className="text-sm font-semibold">Updates</p>
-          </div>
-          {/* Third icon */}
-          <div className="-mt-1 gap-2.5 flex flex-col items-center">
-            <svg
-              viewBox="0 0 32 32"
-              height="32"
-              width="32"
-              preserveAspectRatio="xMidYMid meet"
-              className=""
-              fill="none"
-            >
-              <title>community-refreshed-32</title>
-              <path
-                d="M7.85445 17.0075C7.73851 17.0026 7.62033 17 7.50003 17C6.60797 17 5.83268 17.1426 5.22106 17.3148C4.69554 17.4627 4.0988 17.7054 3.5974 18.0919C3.08634 18.4858 2.62143 19.0755 2.52966 19.8877C2.48679 20.2672 2.50003 21.0796 2.51038 21.5399C2.52882 22.3601 3.20095 23 4.00656 23H7.35217C7.15258 22.5784 7.03459 22.1084 7.01993 21.6087C7.01572 21.4651 7.00943 21.25 7.00505 21H4.50165C4.49773 20.6191 4.50034 20.2599 4.51702 20.1123C4.5308 19.9903 4.59776 19.846 4.81844 19.6759C5.04878 19.4983 5.38363 19.3468 5.7631 19.2399C6.12883 19.137 6.57191 19.0478 7.07407 19.0142C7.12499 18.6798 7.20695 18.3652 7.31207 18.0721C7.45559 17.6719 7.64219 17.3186 7.85445 17.0075Z"
-                fill="currentColor"
-              ></path>
-              <path
-                d="M24.6478 23H27.9935C28.7991 23 29.4712 22.3601 29.4897 21.5399C29.5 21.0796 29.5133 20.2672 29.4704 19.8877C29.3786 19.0755 28.9137 18.4858 28.4027 18.0919C27.9013 17.7054 27.3045 17.4627 26.779 17.3148C26.1674 17.1426 25.3921 17 24.5 17C24.3797 17 24.2615 17.0026 24.1456 17.0075C24.3578 17.3186 24.5444 17.6719 24.6879 18.0721C24.793 18.3652 24.875 18.6798 24.9259 19.0142C25.4281 19.0478 25.8712 19.1369 26.237 19.2399C26.6164 19.3468 26.9513 19.4983 27.1816 19.6759C27.4023 19.846 27.4693 19.9903 27.483 20.1123C27.4997 20.2599 27.5023 20.6191 27.4984 21H24.9949C24.9906 21.25 24.9843 21.4651 24.9801 21.6087C24.9654 22.1084 24.8474 22.5784 24.6478 23Z"
-                fill="currentColor"
-              ></path>
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M16 18C14.6099 18 13.4517 18.2363 12.6506 18.4683C12.2195 18.5931 11.8437 18.7329 11.5552 18.9105C11.275 19.0829 11.1382 19.2525 11.0772 19.4224C11.0547 19.4853 11.0366 19.5555 11.0259 19.6343C10.9955 19.8585 10.996 20.4459 11.0064 21H20.9936C21.004 20.4459 21.0045 19.8585 20.9741 19.6343C20.9634 19.5555 20.9453 19.4853 20.9228 19.4224C20.8618 19.2525 20.725 19.0829 20.4448 18.9105C20.1563 18.7329 19.7805 18.5931 19.3494 18.4683C18.5483 18.2363 17.3901 18 16 18ZM12.0944 16.5472C13.0378 16.274 14.3855 16 16 16C17.6145 16 18.9622 16.274 19.9056 16.5472C20.392 16.688 20.9732 16.8873 21.493 17.2071C22.0211 17.532 22.5438 18.0181 22.8053 18.7473C22.8735 18.9373 22.9259 19.1436 22.956 19.3657C23.0234 19.8633 22.9976 20.9826 22.9809 21.5501C22.957 22.3659 22.287 23 21.4851 23H10.5149C9.71301 23 9.043 22.3659 9.01907 21.5501C9.00243 20.9826 8.97657 19.8633 9.04404 19.3657C9.07414 19.1436 9.1265 18.9373 9.19466 18.7473C9.45616 18.0181 9.97894 17.532 10.507 17.2071C11.0268 16.8873 11.608 16.688 12.0944 16.5472Z"
-                fill="currentColor"
-              ></path>
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M24.5 12C23.9477 12 23.5 12.4477 23.5 13C23.5 13.5523 23.9477 14 24.5 14C25.0523 14 25.5 13.5523 25.5 13C25.5 12.4477 25.0523 12 24.5 12ZM21.5 13C21.5 11.3431 22.8431 10 24.5 10C26.1569 10 27.5 11.3431 27.5 13C27.5 14.6569 26.1569 16 24.5 16C22.8431 16 21.5 14.6569 21.5 13Z"
-                fill="currentColor"
-              ></path>
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M16 9C14.8954 9 14 9.89543 14 11C14 12.1046 14.8954 13 16 13C17.1046 13 18 12.1046 18 11C18 9.89543 17.1046 9 16 9ZM12 11C12 8.79086 13.7909 7 16 7C18.2091 7 20 8.79086 20 11C20 13.2091 18.2091 15 16 15C13.7909 15 12 13.2091 12 11Z"
-                fill="currentColor"
-              ></path>
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M7.5 12C6.94772 12 6.5 12.4477 6.5 13C6.5 13.5523 6.94772 14 7.5 14C8.05228 14 8.5 13.5523 8.5 13C8.5 12.4477 8.05228 12 7.5 12ZM4.5 13C4.5 11.3431 5.84315 10 7.5 10C9.15685 10 10.5 11.3431 10.5 13C10.5 14.6569 9.15685 16 7.5 16C5.84315 16 4.5 14.6569 4.5 13Z"
-                fill="currentColor"
-              ></path>
-            </svg>
-            <p className="-mt-1 text-sm font-semibold">Communities</p>
-          </div>
-          {/* Fourth icon */}
-          <div className="flex gap-2.5 flex-col items-center">
-            <img className="mb-1 w-[24px] h-[24px]" src="./image.png" alt="" />
-            <p className="-mt-1 text-sm font-semibold">Calls</p>
-          </div>
-        </div>
+        <Navbar />
 
         {/* Big right container */}
         {!selectedUser ? (
@@ -373,14 +267,23 @@ const Whatsapp = () => {
             </div>
           </section>
         ) : (
-          <section className="flex-1 xl:block hidden h-full">
-            <div className="sticky top-0 z-10">
+          <section
+            className="
+  flex flex-col flex-1 h-full
+  fixed inset-0 bg-white z-[1]
+  xl:relative xl:z-auto xl:bg-transparent xl:h-auto
+  animate-slideUp
+"
+          >
+            {/* Header */}
+            <div className="sticky top-0 z-20 bg-white border-b shadow-sm">
               <Chatheader setRemoteId={setRemoteId} callingfunc={callingfunc} />
             </div>
-            {/* Scrolling chat box */}
+
+            {/* Messages area */}
             <div
-              className=" w-full px-3 pb-[80px] flex flex-col overflow-y-auto "
-              style={{ height: "90vh" }}
+              className="flex-1 w-full px-3 py-2 overflow-y-auto bg-gray-50"
+              style={{ scrollBehavior: "smooth" }}
             >
               {messages.map((message) => (
                 <div
@@ -388,27 +291,34 @@ const Whatsapp = () => {
                   className={`chat ${
                     message.senderId === authUser.id ? "chat-end" : "chat-start"
                   }`}
-                  ref={messageEndRef}
                 >
                   <div className="chat-bubble flex flex-col">
                     {message.image && (
                       <img
                         src={message.image}
                         alt="Attachment"
-                        className="sm:max-w-[200px] rounded-md mb-2"
+                        className="max-w-[200px] rounded-md mb-2"
                       />
                     )}
                     {message.text && <p>{message.text}</p>}
+
                     <div className="chat-header mb-1 flex justify-end">
-                      <time className="text-xs opacity-50 ">
+                      <time className="text-xs opacity-50">
                         {formatMessageTime(message.createdAt)}
                       </time>
                     </div>
                   </div>
                 </div>
               ))}
+
+              {/* Keep scroll pinned to bottom */}
+              <div ref={messageEndRef}></div>
             </div>
-            <MessageInput />
+
+            {/* Input Bar */}
+            <div className="sticky bottom-0 bg-white border-t z-20">
+              <MessageInput />
+            </div>
           </section>
         )}
       </section>

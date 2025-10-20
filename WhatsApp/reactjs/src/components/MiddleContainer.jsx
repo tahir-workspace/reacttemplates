@@ -28,7 +28,7 @@ const MiddleContainer = () => {
   };
 
   const filteredUsers = users.filter((user) => {
-    const isOnline = onlineUsers.includes(user.id);
+    const isOnline = onlineUsers.includes(user.id.toString());
     const matchesSearch =
       srch === "" ||
       user.fullName?.toLowerCase().includes(srch.toLowerCase()) ||
@@ -258,7 +258,6 @@ const MiddleContainer = () => {
             {/* Card 1 */}
             {filteredUsers.map((user) => (
               <Link
-                to="/chatpage"
                 key={user.id}
                 onClick={() => setSelectedUser(user)}
                 className={`w-full rounded-lg h-[65px] flex items-center gap-4 border mt-3 pl-[10px] hover:bg-gray-100 transition-all duration-200  ${
@@ -270,7 +269,7 @@ const MiddleContainer = () => {
                 {/* Left image box */}
                 <div>
                   <img
-                    src={user.profilePic || "/avatar.png"}
+                    src={user.profilePhoto || "/avatar.png"}
                     alt={user.name}
                     className="w-[60px] h-[50px] rounded-full"
                   />
