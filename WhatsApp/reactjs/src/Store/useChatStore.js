@@ -34,6 +34,20 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
+  deleteMessage: async (messageId) => {
+    try {
+      // optional: send to backend
+      await axiosInstance.delete(`/messages/${messageId}`);
+
+      // remove from local state
+      set((state) => ({
+        messages: state.messages.filter((m) => m.id !== messageId),
+      }));
+    } catch (err) {
+      console.error("Delete message error:", err);
+    }
+  },
+
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
     if (!selectedUser || !selectedUser.id) {

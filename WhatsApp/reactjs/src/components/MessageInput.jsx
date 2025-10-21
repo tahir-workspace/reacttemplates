@@ -145,10 +145,21 @@ const MessageInput = () => {
         <div className="relative">
           {/* 📷 Image picker */}
           <div
-            onClick={() => fileInputRef.current?.click()}
-            className={`absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 cursor-pointer ${
-              imagePreview ? "text-emerald-500" : "text-zinc-400"
-            }`}
+            onClick={() => {
+              if (!audioBlob && !isRecording) fileInputRef.current?.click(); // disable click when audio attached
+            }}
+            className={`absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full 
+    ${
+      audioBlob || isRecording
+        ? "cursor-not-allowed opacity-50"
+        : "hover:bg-gray-100 cursor-pointer"
+    } 
+    ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
+            title={
+              audioBlob
+                ? "Cannot add image while audio is attached"
+                : "Add image"
+            }
           >
             <Image size={20} />
           </div>

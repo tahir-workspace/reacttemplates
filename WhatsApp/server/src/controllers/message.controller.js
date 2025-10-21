@@ -54,6 +54,19 @@ export const getMessages = async (req, res) => {
   }
 };
 
+export const deleteMessage = async (req, res) => {
+  try {
+    const messageId = parseInt(req.params.id);
+    await Message.prismaQuery().delete({
+      where: { id: messageId },
+    });
+    res.status(200).json({ message: "Message deleted successfully" });
+  } catch (error) {
+    console.log("Error in deleteMessage controller:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 export const sendMessage = async (req, res) => {
   try {
     const { text, file, audio } = req.body;
