@@ -31,7 +31,8 @@ model Message {
   senderId   Int
   receiverId Int
   text       String?
-  image      String?
+  file      String?
+  audio     String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 

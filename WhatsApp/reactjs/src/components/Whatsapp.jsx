@@ -283,7 +283,7 @@ const Whatsapp = () => {
             {/* Messages area */}
             <div
               className="flex-1 w-full px-3 py-2 overflow-y-auto bg-gray-50"
-              style={{ scrollBehavior: "smooth" }}
+              style={{ scrollBehavior: "smooth", paddingBottom: "80px" }}
             >
               {messages.map((message) => (
                 <div
@@ -293,9 +293,9 @@ const Whatsapp = () => {
                   }`}
                 >
                   <div className="chat-bubble flex flex-col">
-                    {message.image && (
+                    {message.file && (
                       <img
-                        src={message.image}
+                        src={message.file}
                         alt="Attachment"
                         className="max-w-[200px] rounded-md mb-2"
                       />

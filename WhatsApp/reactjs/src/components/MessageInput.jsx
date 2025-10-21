@@ -111,7 +111,7 @@ const MessageInput = () => {
     try {
       await sendMessage({
         text: text.trim(),
-        image: imagePreview,
+        file: imagePreview,
         audio: audioBase64,
       });
 

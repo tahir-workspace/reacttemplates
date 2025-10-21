@@ -56,22 +56,32 @@ export const getMessages = async (req, res) => {
 
 export const sendMessage = async (req, res) => {
   try {
-    const { text, image } = req.body;
+    const { text, file, audio } = req.body;
     const { id: receiverId } = req.params;
     const senderId = req.user.id;
 
     let imageUrl;
-    if (image) {
+    if (file) {
       // Upload base64 image to cloudinary
-      const uploadResponse = await cloudinary.uploader.upload(image);
+      const uploadResponse = await cloudinary.uploader.upload(file);
       imageUrl = uploadResponse.secure_url;
+    }
+
+    let audioUrl;
+    if (audio) {
+      // Upload base64 audio to cloudinary
+      const uploadResponse = await cloudinary.uploader.upload(audio, {
+        resource_type: "auto",
+      });
+      audioUrl = uploadResponse.secure_url;
     }
 
     const newMessage = new Message({
       senderId: parseInt(senderId),
       receiverId: parseInt(receiverId),
       text,
-      image: imageUrl,
+      file: imageUrl,
+      audio: audioUrl,
     });
 
     const messageData = await newMessage.save(); //saving message to database

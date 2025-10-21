@@ -3,11 +3,18 @@ const { PrismaClient } = pkg;
 const prisma = new PrismaClient();
 
 class Message {
-  constructor({ senderId, receiverId, text = null, image = null }) {
+  constructor({
+    senderId,
+    receiverId,
+    text = null,
+    file = null,
+    audio = null,
+  }) {
     this.senderId = senderId;
     this.receiverId = receiverId;
     this.text = text;
-    this.image = image;
+    this.file = file;
+    this.audio = audio;
   }
 
   // ---------- Instance Methods ----------
@@ -17,7 +24,8 @@ class Message {
         senderId: this.senderId,
         receiverId: this.receiverId,
         text: this.text,
-        image: this.image,
+        file: this.file,
+        audio: this.audio,
       },
     });
     return message;
