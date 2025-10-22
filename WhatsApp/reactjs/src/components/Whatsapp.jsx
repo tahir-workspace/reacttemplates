@@ -104,14 +104,7 @@ const Whatsapp = () => {
             </div>
           </section>
         ) : (
-          <section
-            className="
-  flex flex-col flex-1 h-full
-  fixed inset-0 bg-white z-[1]
-  xl:relative xl:z-auto xl:bg-transparent xl:h-auto
-  animate-slideUp
-"
-          >
+          <section className="flex flex-col flex-1 h-full fixed inset-0 bg-white z-[1] xl:relative xl:z-auto xl:bg-transparent xl:h-auto animate-slideUp">
             {/* Header */}
             <div className="sticky top-0 z-20 bg-white border-b shadow-sm">
               <Chatheader setRemoteId={setRemoteId} callingfunc={callingfunc} />
@@ -121,71 +114,162 @@ const Whatsapp = () => {
             <div
               ref={fancyboxRef}
               className="flex-1 w-full px-3 py-2 overflow-y-auto bg-gray-50"
-              style={{ scrollBehavior: "smooth", paddingBottom: "80px" }}
+              style={{
+                scrollBehavior: "smooth",
+                paddingBottom: "80px",
+                backgroundImage: "url('/background.jpg')",
+                backgroundRepeat: "repeat",
+                backgroundSize: "450px",
+              }}
             >
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`chat ${
-                    message.senderId === authUser.id ? "chat-end" : "chat-start"
-                  }`}
-                >
-                  <div className="chat-bubble flex flex-col relative group">
-                    {/* 🗑️ Delete button (only for own messages) */}
-                    {message.senderId === authUser.id && (
-                      <button
-                        onClick={() => {
-                          setDeleteId(message.id);
-                          setShowConfirm(true);
-                        }}
-                        className="absolute top-[-5px] right-[-2px] opacity-0 group-hover:opacity-100 transition-opacity"
-                        title="Delete message"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="#FFFFFF"
-                          stroke="currentColor"
-                          strokeWidth="1.8"
-                          className="w-5 h-5 text-gray-600 hover:text-red-500 transition-colors duration-200"
+              {messages.map((message, index) => {
+                const currentDate = new Date(message.createdAt);
+                const prevMessage = messages[index - 1];
+                const prevDate = prevMessage
+                  ? new Date(prevMessage.createdAt)
+                  : null;
+
+                // helper to check if date changed
+                const isNewDay =
+                  !prevDate ||
+                  currentDate.toDateString() !== prevDate.toDateString();
+
+                // helper to format the date row
+                const formatDateLabel = (date) => {
+                  const today = new Date();
+                  const yesterday = new Date();
+                  yesterday.setDate(today.getDate() - 1);
+
+                  if (date.toDateString() === today.toDateString())
+                    return "Today";
+                  if (date.toDateString() === yesterday.toDateString())
+                    return "Yesterday";
+
+                  return date.toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  });
+                };
+
+                return (
+                  <React.Fragment key={message.id}>
+                    {/* 📅 Date Row */}
+                    {isNewDay && (
+                      <div className="flex justify-center my-3">
+                        <span
+                          className="bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full"
+                          style={{
+                            backgroundColor: "darkcyan",
+                            color: "#FFF",
+                          }}
                         >
-                          <circle cx="12" cy="12" r="9" />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M9 9l6 6M15 9l-6 6"
-                          />
-                        </svg>
-                      </button>
-                    )}
-
-                    {/* Media (image/audio) */}
-                    {message.file && (
-                      <img
-                        data-fancybox="gallery"
-                        href={message.file}
-                        src={message.file}
-                        alt="Attachment"
-                        className="max-w-[200px] rounded-md mb-2"
-                      />
-                    )}
-
-                    {message.audio && (
-                      <div className="bottom-20 mb-5 bg-gray-100 border p-3 rounded-lg flex items-center gap-2">
-                        <audio controls src={message.audio} />
+                          {formatDateLabel(currentDate)}
+                        </span>
                       </div>
                     )}
 
-                    {message.text && <p>{message.text}</p>}
+                    {/* 💬 Message Bubble */}
+                    <div
+                      className={`chat ${
+                        message.senderId === authUser.id
+                          ? "chat-end"
+                          : "chat-start"
+                      }`}
+                    >
+                      <div
+                        className="chat-bubble flex flex-col relative group"
+                        style={{
+                          minWidth: 150,
+                          backgroundColor:
+                            message.senderId === authUser.id
+                              ? "darkcyan"
+                              : "grey",
+                        }}
+                      >
+                        {/* 🗑️ Delete Button */}
+                        {message.senderId === authUser.id &&
+                          message?.status !== "pending" && (
+                            <button
+                              onClick={() => {
+                                setDeleteId(message.id);
+                                setShowConfirm(true);
+                              }}
+                              className="absolute top-[-5px] right-[-2px] opacity-0 group-hover:opacity-100 transition-opacity"
+                              title="Delete message"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="#FFFFFF"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                                className="w-5 h-5 text-gray-600 hover:text-red-500 transition-colors duration-200"
+                              >
+                                <circle cx="12" cy="12" r="9" />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M9 9l6 6M15 9l-6 6"
+                                />
+                              </svg>
+                            </button>
+                          )}
 
-                    <div className="chat-header mb-1 flex justify-end">
-                      <time className="text-xs opacity-50">
-                        {formatMessageTime(message.createdAt)}
-                      </time>
+                        {/* 📎 Media */}
+                        {message.file && (
+                          <img
+                            data-fancybox="gallery"
+                            href={message.file}
+                            src={message.file}
+                            alt="Attachment"
+                            className="max-w-[200px] rounded-md mb-2"
+                          />
+                        )}
+
+                        {message.audio && (
+                          <div className="bottom-20 mb-5 bg-gray-100 border p-3 rounded-lg flex items-center gap-2">
+                            <audio controls src={message.audio} />
+                          </div>
+                        )}
+
+                        {/* 💬 Text */}
+                        {message.text && (
+                          <p style={{ color: "#FFF" }}>{message.text}</p>
+                        )}
+
+                        <div className="chat-header mb-1 flex justify-between items-center w-full">
+                          {/* Left: Message Status */}
+                          {message.senderId === authUser.id && (
+                            <div className="flex items-center gap-1 text-xs">
+                              {message.status === "pending" && (
+                                <span className="text-xs text-white opacity-70">
+                                  Pending...
+                                </span>
+                              )}
+                              {message.status === "failed" && (
+                                <span className="text-xs text-white opacity-70">
+                                  Failed
+                                </span>
+                              )}
+                              {/* {(!message.status || message.status === "sent") && (
+                              <span className="text-xs text-white opacity-70">
+                                Sent
+                              </span>
+                            )} */}
+                            </div>
+                          )}
+
+                          {/* Right: Time */}
+                          <time className="text-xs text-white opacity-70">
+                            {formatMessageTime(message.createdAt)}
+                          </time>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  </React.Fragment>
+                );
+              })}
 
               {/* Keep scroll pinned to bottom */}
               <div ref={messageEndRef}></div>

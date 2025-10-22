@@ -109,7 +109,7 @@ const MessageInput = () => {
     }
 
     try {
-      await sendMessage({
+      sendMessage({
         text: text.trim(),
         file: imagePreview,
         audio: audioBase64,
@@ -193,14 +193,14 @@ const MessageInput = () => {
             type="text"
             value={text}
             className="h-[55px] pl-[55px] pr-[50px] border rounded-full"
-            style={{ width: width }}
+            style={{ width: width, backgroundColor: "#FFF" }}
             placeholder={isRecording ? "Recording..." : "Type a message"}
             disabled={isRecording}
           />
 
           {/* 🖼 Image preview */}
           {imagePreview && (
-            <div className="absolute bottom-14 left-[100px] border rounded-md">
+            <div className="absolute bottom-16 left-[5px] mb-2 border rounded-md">
               <img
                 src={imagePreview}
                 alt="Preview"
@@ -213,12 +213,31 @@ const MessageInput = () => {
               >
                 <X className="size-3 text-red-500" />
               </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                className=""
+                aria-hidden="true"
+                role="img"
+                style={{ position: "absolute", bottom: 10, left: 10 }}
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 12.5v.006a6.5 6.5 0 0 1-11.593 4.596L3.5 11.19a4.5 4.5 0 0 1 6.364-6.364l6.05 6.05a3.5 3.5 0 0 1-4.95 4.95L7.086 9.86"
+                />
+              </svg>
             </div>
           )}
 
           {/* 🔊 Audio preview */}
           {audioBlob && (
-            <div className="absolute bottom-20 left-[100px] bg-gray-100 border p-3 rounded-lg flex items-center gap-2">
+            <div className="absolute bottom-16 left-[5px] bg-gray-100 border p-3 rounded-lg flex items-center gap-2">
               <audio controls src={URL.createObjectURL(audioBlob)} />
               <button
                 type="button"
@@ -227,6 +246,25 @@ const MessageInput = () => {
               >
                 <X size={16} />
               </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                className=""
+                aria-hidden="true"
+                role="img"
+                style={{ position: "absolute", bottom: 10, left: 10 }}
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 12.5v.006a6.5 6.5 0 0 1-11.593 4.596L3.5 11.19a4.5 4.5 0 0 1 6.364-6.364l6.05 6.05a3.5 3.5 0 0 1-4.95 4.95L7.086 9.86"
+                />
+              </svg>
             </div>
           )}
 
