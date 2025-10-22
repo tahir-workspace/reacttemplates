@@ -1,6 +1,7 @@
 import axios from "axios";
+import config from "../config";
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.MODE === "development" ? "http://localhost:5001/api" : "/api",
+  baseURL: config.serverBaseUrl + "/api",
   withCredentials: true,
 });

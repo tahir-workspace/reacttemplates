@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Peer } from "peerjs";
 import { Mic, MicOff, Video, VideoOff, PhoneOff } from "lucide-react";
 import CallScreen from "../components/CallScreen.jsx";
+import config from "../config.js";
 
 const incomingRingUrl = "/sounds/incoming.mp3";
 const outgoingRingUrl = "/sounds/outgoing.mp3";
@@ -57,11 +58,7 @@ const VideoCall = ({
         await new Promise((r) => setTimeout(r, 300));
       }
 
-      const peer = new Peer(idToUse, {
-        host: "localhost",
-        port: 5001,
-        path: "/peerjs/myapp",
-      });
+      const peer = new Peer(idToUse, config.peerJsOptions);
 
       peerRef.current = peer;
 

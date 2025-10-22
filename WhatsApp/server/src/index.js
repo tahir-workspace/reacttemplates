@@ -24,7 +24,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [process.env.LOCAL_ORIGIN, process.env.PROD_ORIGIN],
     credentials: true,
   })
 );
