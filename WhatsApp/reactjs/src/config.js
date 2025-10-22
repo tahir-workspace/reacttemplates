@@ -3,13 +3,13 @@ const isLocalhost = window.location.hostname === "localhost";
 
 const config = {
   server: {
-    host: isLocalhost ? "localhost" : "tahir-workspace-wu-express.vercel.app",
-    port: 5001,
+    host: isLocalhost ? "localhost" : "reacttemplates.onrender.com",
+    port: isLocalhost ? 5001 : 443,
   },
 
   peerjs: {
-    host: isLocalhost ? "localhost" : "tahir-workspace-wu-express.vercel.app",
-    port: 5001,
+    host: isLocalhost ? "localhost" : "reacttemplates.onrender.com",
+    port: isLocalhost ? 5001 : 443,
     path: "/peerjs/myapp",
   },
 
