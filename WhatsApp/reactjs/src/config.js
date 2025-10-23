@@ -8,7 +8,7 @@ const config = {
   },
 
   peerjs: {
-    host: isLocalhost ? "localhost" : "tahir-wu-express.onrender.com",
+    host: isLocalhost ? "localhost" : "tahir-workspace-peerjs.onrender.com",
     port: isLocalhost ? 5001 : 443,
     path: "/peerjs/myapp",
   },
