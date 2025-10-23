@@ -27,11 +27,9 @@ const config = {
       config: {
         iceServers: [
           { urls: "stun:stun.l.google.com:19302" },
-          {
-            urls: "turn:relay1.expressturn.com:3478",
-            username: "efree",
-            credential: "efree",
-          },
+          { urls: "stun:stun.cloudflare.com:3478" },
+          { urls: "stun:stun.voipawesome.com:19302" },
+          { urls: "stun.nextcloud.com:3478" },
         ],
       },
     };
