@@ -32,7 +32,7 @@ export const signup = async (req, res) => {
     if (newUser) {
       // generate jwt token here
       const useData = await newUser.save();
-      generateToken(useData.id, res);
+      const token = generateToken(useData.id, res);
 
       console.log(useData);
 
@@ -41,6 +41,7 @@ export const signup = async (req, res) => {
         fullName: useData.fullName,
         email: useData.email,
         profilePhoto: useData.profilePhoto,
+        accessToken: token,
       });
     } else {
       res.status(400).json({ message: "Invalid user data" });
@@ -65,13 +66,14 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    generateToken(user.id, res);
+    const token = generateToken(user.id, res);
 
     res.status(200).json({
       id: user.id,
       fullName: user.fullName,
       email: user.email,
       profilePhoto: user.profilePhoto,
+      accessToken: token,
     });
   } catch (error) {
     console.log("Error in login controller", error.message);
