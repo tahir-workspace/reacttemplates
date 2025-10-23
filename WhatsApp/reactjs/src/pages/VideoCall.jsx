@@ -108,9 +108,21 @@ const VideoCall = ({
 
     createPeer(userId);
 
-    return () => {
-      peerRef.current?.destroy();
-      stopAllSounds();
+    return async () => {
+      try {
+        if (peerRef.current) {
+          console.log("Destroying PeerJS connection...");
+          peerRef.current.destroy();
+          peerRef.current = null;
+        }
+
+        stopAllSounds();
+
+        // Give a small delay to let PeerJS close sockets properly
+        await new Promise((resolve) => setTimeout(resolve, 300));
+      } catch (err) {
+        console.warn("Error while cleaning up PeerJS:", err);
+      }
     };
   }, [userId]);
 

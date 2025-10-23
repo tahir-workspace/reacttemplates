@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { ExpressPeerServer } from "peer";
+//import { ExpressPeerServer } from "peer";
 
 //import path from "path";
 
@@ -41,12 +41,12 @@ app.use("/api/messages", messageRoutes);
 // }
 
 // === PEERJS SERVER MOUNTED ===
-const peerServer = ExpressPeerServer(server, {
-  debug: true,
-  path: "/myapp",
-  allow_discovery: true,
-});
-app.use("/peerjs", peerServer);
+// const peerServer = ExpressPeerServer(server, {
+//   debug: false,
+//   path: "/myapp",
+//   allow_discovery: true,
+// });
+// app.use("/peerjs", peerServer);
 
 server.listen(PORT, () => {
   console.log("server is running on PORT:" + PORT);
