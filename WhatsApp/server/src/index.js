@@ -42,7 +42,9 @@ app.use("/api/messages", messageRoutes);
 
 // === PEERJS SERVER MOUNTED ===
 const peerServer = ExpressPeerServer(server, {
+  debug: true,
   path: "/myapp",
+  allow_discovery: true,
 });
 app.use("/peerjs", peerServer);
 
