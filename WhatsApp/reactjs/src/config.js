@@ -3,12 +3,12 @@ const isLocalhost = window.location.hostname === "localhost";
 
 const config = {
   server: {
-    host: isLocalhost ? "localhost" : "reacttemplates.onrender.com",
+    host: isLocalhost ? "localhost" : "tahir-wu-express.onrender.com",
     port: isLocalhost ? 5001 : 443,
   },
 
   peerjs: {
-    host: isLocalhost ? "localhost" : "reacttemplates.onrender.com",
+    host: isLocalhost ? "localhost" : "tahir-wu-express.onrender.com",
     port: isLocalhost ? 5001 : 443,
     path: "/peerjs/myapp",
   },
