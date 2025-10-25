@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useAuthStore } from "../Store/useAuthStore";
 import { useChatStore } from "../Store/useChatStore";
+import { formatChatDate } from "../lib/utils";
 import { Link } from "react-router-dom";
 
 const MiddleContainer = () => {
@@ -13,6 +14,7 @@ const MiddleContainer = () => {
 
   useEffect(() => {
     getUsers();
+    return () => {};
   }, [getUsers]);
   const { logout } = useAuthStore();
 
@@ -210,15 +212,67 @@ const MiddleContainer = () => {
                 </div>
                 {/* Right card box */}
                 <div className="flex justify-between w-full pr-[10px]">
-                  <div className="">
-                    <h3 className="font-semibold mb-[5px] h-[21px] w-[255px] overflow-x-hidden overflow-y-hidden">
-                      {user.fullName}
-                    </h3>
-
-                    <p className="text-gray-500">
+                  <div className="w-full">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-semibold mb-[5px] truncate">
+                        {user.fullName}
+                      </h3>
+                      {/* <p className="text-gray-500">
                       {onlineUsers.includes(user.id.toString())
                         ? "Online"
                         : "offline"}
+                    </p> */}
+                      {user.lastMessage?.createdAt && (
+                        <span className="text-xs text-gray-600 ml-2 whitespace-nowrap">
+                          {formatChatDate(user.lastMessage.createdAt)}
+                        </span>
+                      )}
+                    </div>
+
+                    <p className="text-gray-600 text-sm truncate flex items-center gap-1">
+                      {user.lastMessage ? (
+                        <>
+                          {/* 🎤 Audio message */}
+                          {user.lastMessage.audio && (
+                            <>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                className="w-4 h-4 text-gray-500"
+                              >
+                                <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2Zm-5 9a7 7 0 0 0 7-7h2a9 9 0 0 1-18 0h2a7 7 0 0 0 7 7Z" />
+                              </svg>
+                              <span>Voice message</span>
+                            </>
+                          )}
+
+                          {/* 🖼️ Photo/File message */}
+                          {!user.lastMessage.audio && user.lastMessage.file && (
+                            <>
+                              {/* ✅ Better gallery/photo icon */}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 512 512"
+                                fill="currentColor"
+                                className="w-4 h-4 text-gray-500"
+                              >
+                                <path d="M464 64H48C21.5 64 0 85.5 0 112v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zm16 336c0 8.8-7.2 16-16 16H48c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16h416c8.8 0 16 7.2 16 16v288zM128 160a32 32 0 1 0 0 64 32 32 0 0 0 0-64zm304 240H80l96-128 64 80 96-128 96 128z" />
+                              </svg>
+                              <span>Photo</span>
+                            </>
+                          )}
+
+                          {/* 💬 Text message */}
+                          {!user.lastMessage.audio &&
+                            !user.lastMessage.file &&
+                            user.lastMessage.text && (
+                              <span>{user.lastMessage.text}</span>
+                            )}
+                        </>
+                      ) : (
+                        ""
+                      )}
                     </p>
                   </div>
                 </div>
@@ -257,7 +311,7 @@ const MiddleContainer = () => {
           <div className="flex-1">
             {/* Card 1 */}
             {filteredUsers.map((user) => (
-              <Link
+              <div
                 key={user.id}
                 onClick={() => setSelectedUser(user)}
                 className={`w-full rounded-lg h-[65px] flex items-center gap-4 border mt-3 pl-[10px] hover:bg-gray-100 transition-all duration-200  ${
@@ -266,7 +320,7 @@ const MiddleContainer = () => {
                     : ""
                 }`}
               >
-                {/* Left image box */}
+                {/* <!--left image box --> */}
                 <div>
                   <img
                     src={user.profilePhoto || "/avatar.png"}
@@ -276,19 +330,71 @@ const MiddleContainer = () => {
                 </div>
                 {/* Right card box */}
                 <div className="flex justify-between w-full pr-[10px]">
-                  <div className="">
-                    <h3 className="font-semibold mb-[5px] h-[21px] w-[255px] overflow-x-hidden overflow-y-hidden">
-                      {user.fullName}
-                    </h3>
-
-                    <p className="text-gray-500">
+                  <div className="w-full">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-semibold mb-[5px] truncate">
+                        {user.fullName}
+                      </h3>
+                      {/* <p className="text-gray-500">
                       {onlineUsers.includes(user.id.toString())
                         ? "Online"
                         : "offline"}
+                    </p> */}
+                      {user.lastMessage?.createdAt && (
+                        <span className="text-xs text-gray-600 ml-2 whitespace-nowrap">
+                          {formatChatDate(user.lastMessage.createdAt)}
+                        </span>
+                      )}
+                    </div>
+
+                    <p className="text-gray-600 text-sm truncate flex items-center gap-1">
+                      {user.lastMessage ? (
+                        <>
+                          {/* 🎤 Audio message */}
+                          {user.lastMessage.audio && (
+                            <>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                className="w-4 h-4 text-gray-500"
+                              >
+                                <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2Zm-5 9a7 7 0 0 0 7-7h2a9 9 0 0 1-18 0h2a7 7 0 0 0 7 7Z" />
+                              </svg>
+                              <span>Voice message</span>
+                            </>
+                          )}
+
+                          {/* 🖼️ Photo/File message */}
+                          {!user.lastMessage.audio && user.lastMessage.file && (
+                            <>
+                              {/* ✅ Better gallery/photo icon */}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 512 512"
+                                fill="currentColor"
+                                className="w-4 h-4 text-gray-500"
+                              >
+                                <path d="M464 64H48C21.5 64 0 85.5 0 112v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zm16 336c0 8.8-7.2 16-16 16H48c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16h416c8.8 0 16 7.2 16 16v288zM128 160a32 32 0 1 0 0 64 32 32 0 0 0 0-64zm304 240H80l96-128 64 80 96-128 96 128z" />
+                              </svg>
+                              <span>Photo</span>
+                            </>
+                          )}
+
+                          {/* 💬 Text message */}
+                          {!user.lastMessage.audio &&
+                            !user.lastMessage.file &&
+                            user.lastMessage.text && (
+                              <span>{user.lastMessage.text}</span>
+                            )}
+                        </>
+                      ) : (
+                        ""
+                      )}
                     </p>
                   </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
           {/* <div className="flex justify-center mt-4">

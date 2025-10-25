@@ -6,6 +6,7 @@ import { Camera, Pencil, Check } from "lucide-react";
 import toast from "react-hot-toast";
 import Navbar from "../components/Navbar";
 import SideNav from "../components/SideNav";
+import Placeholder from "../components/Placeholder";
 
 const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile, updateUserInfo } =
@@ -335,15 +336,12 @@ const ProfilePage = () => {
         </form>
       </div>
       {/* Last container */}
-      <div className="xl:flex hidden flex-col gap-10 flex-1 justify-center items-center">
+      <div
+        className="xl:flex hidden flex-col gap-10 flex-1 justify-center items-center"
+        style={{ background: "#f7f5f3" }}
+      >
         {/* Profile image field */}
-        <div className="w-[80px]">
-          <img src="./avatar.png" alt="" />
-        </div>
-        {/* Profile heading field */}
-        <div>
-          <h1 className="text-4xl text-gray-500">Profile</h1>
-        </div>
+        <Placeholder />
       </div>
       <Navbar />
     </div>

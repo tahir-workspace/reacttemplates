@@ -7,7 +7,10 @@ export default function SideNav() {
   const [selectedImg, setSelectedImg] = useState(null);
 
   return (
-    <div className="sticky top-0 left-0 hidden w-[65px] h-screen border border-y-0 border-l-0 border-r-gray-100 xl:flex flex-col justify-between">
+    <div
+      className="sticky top-0 left-0 hidden w-[65px] h-screen border border-y-0 border-l-0 border-r-gray-100 xl:flex flex-col justify-between"
+      style={{ background: "#f7f5f3" }}
+    >
       {/* Upper assets */}
       <div className="flex flex-col items-center gap-1 mt-2">
         {/* Icon 1  */}

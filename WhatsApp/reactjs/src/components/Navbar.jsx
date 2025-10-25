@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <div
       className="fixed border border-t-gray-100 bg-white bottom-0  pt-[15px] pb-[10px] px-[30px] w-screen xl:hidden flex items-center justify-between"
-      style={{ justifyContent: "space-around" }}
+      style={{ justifyContent: "space-around", background: "#f7f5f3" }}
     >
       {/* First icon */}
       <div

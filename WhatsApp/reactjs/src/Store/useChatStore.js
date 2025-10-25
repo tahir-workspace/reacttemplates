@@ -116,25 +116,45 @@ export const useChatStore = create((set, get) => ({
 
   subscribeToMessages: () => {
     const { selectedUser } = get();
-    console.log("selectedUser", selectedUser);
-    if (!selectedUser) return;
-
     const socket = useAuthStore.getState().socket;
-
-    console.log("Subscribing to messages with socket:", socket);
 
     if (!socket) return;
 
-    socket.off("newMessage"); // avoid duplicate listeners
+    socket.off("newMessage");
     socket.on("newMessage", (newMessage) => {
-      console.log("New message received:", newMessage);
-      const isMessageSentFromSelectedUser =
-        newMessage.senderId === selectedUser.id;
+      console.log("📩 New message received:", newMessage);
 
-      if (!isMessageSentFromSelectedUser) return; //If we select one chat then the message will go that person only not to others.
+      // If this chat is open, append the message
+      const isFromSelectedUser =
+        selectedUser && newMessage.senderId === selectedUser.id;
+      if (isFromSelectedUser) {
+        set({
+          messages: [...get().messages, newMessage],
+        });
+      }
 
-      set({
-        messages: [...get().messages, newMessage], //keeping all previous message and adding new one
+      // 🧩 Update last message in users list
+      set((state) => {
+        // update user's lastMessage
+        const updatedUsers = state.users.map((user) =>
+          user.id === newMessage.senderId || user.id === newMessage.receiverId
+            ? { ...user, lastMessage: newMessage }
+            : user
+        );
+
+        // sort by latest message (newest on top)
+        updatedUsers.sort((a, b) => {
+          const timeA = a.lastMessage?.createdAt
+            ? new Date(a.lastMessage.createdAt).getTime()
+            : 0;
+          const timeB = b.lastMessage?.createdAt
+            ? new Date(b.lastMessage.createdAt).getTime()
+            : 0;
+          return timeB - timeA; // descending
+        });
+
+        // return updated state
+        return { users: updatedUsers };
       });
     });
   },
@@ -142,6 +162,46 @@ export const useChatStore = create((set, get) => ({
   unsubscribeFromMessages: () => {
     const socket = useAuthStore.getState().socket;
     socket.off("newMessage");
+  },
+
+  subscribeToDeletedMessages: () => {
+    const { selectedUser } = get();
+    const socket = useAuthStore.getState().socket;
+
+    if (!socket) return;
+
+    socket.off("messageDeleted");
+    socket.on("messageDeleted", ({ messageId, receiverId }) => {
+      console.log("🗑️ Message deleted:", messageId, receiverId);
+
+      // 1️⃣ Remove it from local messages
+      set({
+        messages: get().messages.filter((m) => m.id !== messageId),
+      });
+
+      // 2️⃣ Update that user's last message preview
+      set((state) => ({
+        users: state.users.map((user) =>
+          user.lastMessage.id === messageId
+            ? {
+                ...user,
+                lastMessage: {
+                  ...user.lastMessage,
+                  text: "Message deleted",
+                  file: null,
+                  audio: null,
+                  createdAt: new Date().toISOString(),
+                },
+              }
+            : user
+        ),
+      }));
+    });
+  },
+
+  unSubscribeFromDeletedMessages: () => {
+    const socket = useAuthStore.getState().socket;
+    socket?.off("messageDeleted");
   },
 
   setSelectedUser: (selectedUser) => set({ selectedUser }),

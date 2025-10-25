@@ -33,6 +33,32 @@ app.use("/peerjs", peerServer);
 // Optional test route
 app.get("/", (req, res) => res.send("✅ PeerJS server running!"));
 
+// Track connected peers manually
+const activePeers = new Set();
+
+peerServer.on("connection", (client) => {
+  console.log("Peer connected:", client.getId());
+  activePeers.add(client.getId());
+});
+
+peerServer.on("disconnect", (client) => {
+  console.log("Peer disconnected:", client.getId());
+  activePeers.delete(client.getId());
+});
+
+// API endpoint to force remove a peer
+app.get("/disconnect/:id", (req, res) => {
+  const id = req.params.id;
+
+  if (activePeers.has(id)) {
+    activePeers.delete(id);
+    console.log(`Force removed peer ${id}`);
+    return res.send(`Peer ${id} removed`);
+  }
+
+  res.status(404).send(`Peer ${id} not found`);
+});
+
 // === START SERVER ===
 server.listen(PORT, () => {
   console.log(`✅ PeerJS server running on port ${PORT}`);
