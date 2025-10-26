@@ -25,6 +25,9 @@ export const useChatStore = create((set, get) => ({
   getMessages: async (userId, page = 1) => {
     if (page === 0) return { noData: true };
 
+    if (page === 1) {
+      set({ messages: [] });
+    }
     set({ isMessagesLoading: true });
     try {
       const res = await axiosInstance.get(`/messages/${userId}?page=${page}`);
