@@ -289,7 +289,7 @@ const MiddleContainer = () => {
                             whiteSpace: "nowrap", // Prevents text from wrapping
                             overflow: "hidden", // Hides overflow text
                             textOverflow: "ellipsis", // Shows "..." for overflow
-                            width: "300px", // Set your container width
+                            width: "250px", // Set your container width
                           }}
                         >
                           {user?.about ? user?.about : "No messages to show"}
@@ -429,7 +429,7 @@ const MiddleContainer = () => {
                             whiteSpace: "nowrap", // Prevents text from wrapping
                             overflow: "hidden", // Hides overflow text
                             textOverflow: "ellipsis", // Shows "..." for overflow
-                            width: "300px", // Set your container width
+                            width: "250px", // Set your container width
                           }}
                         >
                           {user?.about ? user?.about : "No messages to show"}
