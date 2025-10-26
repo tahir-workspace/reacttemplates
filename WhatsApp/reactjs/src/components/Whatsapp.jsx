@@ -84,6 +84,7 @@ const Whatsapp = () => {
     setHasMore(true);
     setPage(1);
     setIsLoading(false);
+    setScrollToBottom(false);
   }, [selectedUser?.id]);
 
   useEffect(() => {

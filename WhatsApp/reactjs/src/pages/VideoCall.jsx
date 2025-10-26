@@ -30,9 +30,11 @@ const VideoCall = ({
   const remoteVideoRef = useRef(null);
   const currentCall = useRef(null);
   const peerRef = useRef(null);
+  const connRef = useRef(null);
   const localStreamRef = useRef(null);
   const incomingAudioRef = useRef(null);
   const outgoingAudioRef = useRef(null);
+  const [lastPing, setLastPing] = useState(Date.now());
   const debug = false;
 
   useEffect(() => {
@@ -55,6 +57,7 @@ const VideoCall = ({
         try {
           peerRef.current.destroy();
         } catch (e) {}
+        clearInterval(connRef.current?.pingInterval);
         await new Promise((r) => setTimeout(r, 300));
       }
 
@@ -85,7 +88,20 @@ const VideoCall = ({
             if (data.audioEnabled !== undefined)
               setRemoteAudioEnabled(data.audioEnabled);
           }
+
+          if (data.type === "ping") {
+            // mark as alive
+            setLastPing(Date.now());
+          }
         });
+
+        connRef.current = conn; // store current data connection
+
+        // start ping interval
+        clearInterval(connRef.current?.pingInterval);
+        connRef.current.pingInterval = setInterval(() => {
+          if (conn.open) conn.send({ type: "ping", ts: Date.now() });
+        }, 15000);
       });
 
       peer.on("call", (call) => {
@@ -108,14 +124,31 @@ const VideoCall = ({
 
     createPeer(userId);
 
+    const interval = setInterval(async () => {
+      const peer = peerRef.current;
+      const now = Date.now();
+      const isDead = !peer || peer.destroyed || peer.disconnected;
+
+      console.log("Peer health check:", {
+        destroyed: peer?.destroyed,
+        disconnected: peer?.disconnected,
+      });
+
+      if (isDead) {
+        console.warn("Peer seems disconnected — recreating...");
+        await createPeer(userId);
+      }
+    }, 5000);
+
     return async () => {
       try {
         stopAllSounds();
+        clearInterval(interval);
       } catch (err) {
         console.warn("Error while cleaning up PeerJS:", err);
       }
     };
-  }, [userId]);
+  }, [userId, lastPing]);
 
   const handlePeerDisconnect = () => endCall();
 
