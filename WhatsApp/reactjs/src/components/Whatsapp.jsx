@@ -48,13 +48,16 @@ const Whatsapp = () => {
     if (!selectedUser?.id) return;
 
     const fetchMessages = async () => {
-      if (hasMore) {
+      if (hasMore || page === 1) {
         setIsLoading(true);
+        setHasMore(false);
         const result = await getMessages(selectedUser.id, page);
         setIsLoading(false);
 
         if (result.noData) {
           setHasMore(false); // stop further loading
+        } else {
+          setHasMore(true); // allow further loading
         }
       }
     };
@@ -76,6 +79,12 @@ const Whatsapp = () => {
     unsubscribeFromMessages,
     page,
   ]);
+
+  useEffect(() => {
+    setHasMore(true);
+    setPage(1);
+    setIsLoading(false);
+  }, [selectedUser?.id]);
 
   useEffect(() => {
     if (messages.length > prevMessageCount.current) {

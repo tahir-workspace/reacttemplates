@@ -8,7 +8,7 @@ export default function useDualScroll({
   isLoading,
 }) {
   useEffect(() => {
-    console.log("scroll detail:", hasMore, isLoading);
+    //console.log("scroll detail:", hasMore, isLoading);
     //console.log("scrollRef.current2:", scrollRef.current);
     const handleWindowScroll = () => {
       const doc = document.documentElement;
@@ -21,7 +21,7 @@ export default function useDualScroll({
       if (!hasMore) return;
 
       // Load previous page when near top
-      if (window.scrollY < 10 && !isLoading) {
+      if (window.scrollY < 1 && !isLoading) {
         setPage((prev) => prev + 1);
       }
     };
@@ -38,7 +38,7 @@ export default function useDualScroll({
       if (!hasMore) return;
 
       // If scrolled to top of the div
-      if (scrollTop < 10 && !isLoading) {
+      if (scrollTop < 1 && !isLoading) {
         setPage((prev) => prev + 1);
       }
     };
