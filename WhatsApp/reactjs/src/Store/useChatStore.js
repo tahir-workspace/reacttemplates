@@ -22,13 +22,27 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
-  getMessages: async (userId) => {
+  getMessages: async (userId, page = 1) => {
+    if (page === 0) return { noData: true };
+
     set({ isMessagesLoading: true });
     try {
-      const res = await axiosInstance.get(`/messages/${userId}`);
-      set({ messages: res.data });
+      const res = await axiosInstance.get(`/messages/${userId}?page=${page}`);
+      const messagesFetched = res.data;
+
+      // If first page, replace messages
+      if (page === 1) {
+        set({ messages: messagesFetched });
+      } else {
+        // Append messages for subsequent pages
+        set((state) => ({ messages: [...state.messages, ...messagesFetched] }));
+      }
+
+      // Return flag if no more messages
+      return { noData: messagesFetched.length === 0 };
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.error || "Failed to fetch messages");
+      return { noData: true };
     } finally {
       set({ isMessagesLoading: false });
     }

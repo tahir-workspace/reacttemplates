@@ -13,6 +13,7 @@ import useFancybox from "../hooks/useFancybox";
 import SideNav from "./SideNav";
 import ConfirmPopup from "./ConfirmPopup";
 import Placeholder from "./Placeholder";
+import useDualScroll from "./useDualScroll";
 
 const Whatsapp = () => {
   const {
@@ -34,15 +35,33 @@ const Whatsapp = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const prevMessageCount = useRef(0);
+  const containerRef = useRef();
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [scrollToBottom, setScrollToBottom] = useState(false);
+  const scrollRef = useRef(null);
 
   const [fancyboxRef] = useFancybox({});
 
   useEffect(() => {
-    console.log("tahir console", authUser, selectedUser);
     if (!selectedUser?.id) return;
 
-    getMessages(selectedUser.id);
+    const fetchMessages = async () => {
+      if (hasMore) {
+        setIsLoading(true);
+        const result = await getMessages(selectedUser.id, page);
+        setIsLoading(false);
 
+        if (result.noData) {
+          setHasMore(false); // stop further loading
+        }
+      }
+    };
+
+    fetchMessages();
+
+    // Subscriptions
     subscribeToMessages();
     subscribeToDeletedMessages();
 
@@ -55,6 +74,7 @@ const Whatsapp = () => {
     getMessages,
     subscribeToMessages,
     unsubscribeFromMessages,
+    page,
   ]);
 
   useEffect(() => {
@@ -65,6 +85,44 @@ const Whatsapp = () => {
 
     prevMessageCount.current = messages.length;
   }, [messages]);
+
+  useDualScroll({
+    scrollRef,
+    setPage,
+    setScrollToBottom,
+    hasMore,
+    isLoading,
+  });
+
+  const ChevronDownIcon = ({ size = 16, color = "currentColor" }) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      fill={color}
+      viewBox="0 0 320 512"
+    >
+      <path
+        d="M143 352.3 7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 
+      24.6-9.4 33.9 0L160 284.1l96.4-96.4c9.4-9.4 24.6-9.4 
+      33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 
+      33.9L177 352.3c-9.4 9.4-24.6 9.4-34 0z"
+      />
+    </svg>
+  );
+
+  const ScrollToBottomButton = ({ onClick }) => {
+    if (!scrollToBottom) return null;
+    return (
+      <button
+        onClick={onClick}
+        className="fixed bottom-2 right-4 bg-white rounded-full shadow-md p-3 flex items-center justify-center hover:bg-gray-100 transition"
+        style={{ bottom: "100px" }}
+      >
+        <ChevronDownIcon className="text-gray-700 w-5 h-5" />
+      </button>
+    );
+  };
 
   return (
     <>
@@ -82,15 +140,17 @@ const Whatsapp = () => {
             <Placeholder />
           </section>
         ) : (
-          <section className="flex flex-col flex-1 h-full fixed inset-0 bg-white z-[1] xl:relative xl:z-auto xl:bg-transparent xl:h-auto animate-slideUp">
+          <section
+            ref={fancyboxRef}
+            className="flex flex-col flex-1 h-full fixed inset-0 bg-white z-[1] xl:relative xl:z-auto xl:bg-transparent xl:h-auto animate-slideUp"
+          >
             {/* Header */}
             <div className="sticky top-0 z-20 bg-white border-b shadow-sm">
               <Chatheader setRemoteId={setRemoteId} callingfunc={callingfunc} />
             </div>
-
             {/* Messages area */}
             <div
-              ref={fancyboxRef}
+              ref={scrollRef}
               className="flex-1 w-full px-3 py-2 overflow-y-auto bg-gray-50"
               style={{
                 scrollBehavior: "smooth",
@@ -100,6 +160,24 @@ const Whatsapp = () => {
                 backgroundSize: "450px",
               }}
             >
+              {isLoading && (
+                <div className="flex justify-center my-3">
+                  <span
+                    className="bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full"
+                    style={{
+                      backgroundColor: "#FFF",
+                      color: "#7c7575",
+                      fontWeight: "500",
+                      borderRadius: "8px",
+                    }}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                      <span className="text-gray-700">Loading ...</span>
+                    </div>
+                  </span>
+                </div>
+              )}
               {messages.map((message, index) => {
                 const currentDate = new Date(message.createdAt);
                 const prevMessage = messages[index - 1];
@@ -274,7 +352,11 @@ const Whatsapp = () => {
               {/* Keep scroll pinned to bottom */}
               <div ref={messageEndRef}></div>
             </div>
-
+            <ScrollToBottomButton
+              onClick={() => {
+                messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+              }}
+            />
             {/* Input Bar */}
             <div className="sticky bottom-0 bg-white border-t z-20">
               <MessageInput />

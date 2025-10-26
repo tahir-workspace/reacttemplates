@@ -91,6 +91,7 @@ const ProfilePage = () => {
                   accept="image/*"
                   onChange={handleImageUpload}
                   disabled={isUpdatingProfile}
+                  maxLength={35}
                 />
               </label>
             </div>
@@ -130,6 +131,7 @@ const ProfilePage = () => {
                           handleSave(); // save on Enter
                         }
                       }}
+                      maxLength={35}
                       className="border border-r-0 border-l-0 border-t-0 border-b-green-500 focus:outline-none w-full "
                     />
                     {fullName !== authUser.fullName ? (
@@ -168,6 +170,7 @@ const ProfilePage = () => {
                 ) : (
                   <>
                     <textarea
+                      maxLength={48}
                       onBlur={() => {
                         if (about === authUser.about) {
                           setIsEditingAbout(false); // close if unchanged

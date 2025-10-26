@@ -267,11 +267,33 @@ const MiddleContainer = () => {
                           {!user.lastMessage.audio &&
                             !user.lastMessage.file &&
                             user.lastMessage.text && (
-                              <span>{user.lastMessage.text}</span>
+                              <span
+                                style={{
+                                  whiteSpace: "nowrap", // Prevents text from wrapping
+                                  overflow: "hidden", // Hides overflow text
+                                  textOverflow: "ellipsis", // Shows "..." for overflow
+                                  width: "300px", // Set your container width
+                                }}
+                              >
+                                {user.lastMessage.text.length > 50
+                                  ? user.lastMessage.text.substring(0, 50) +
+                                    "..."
+                                  : user.lastMessage.text}
+                              </span>
                             )}
                         </>
                       ) : (
-                        ""
+                        <span
+                          className="text-gray-400"
+                          style={{
+                            whiteSpace: "nowrap", // Prevents text from wrapping
+                            overflow: "hidden", // Hides overflow text
+                            textOverflow: "ellipsis", // Shows "..." for overflow
+                            width: "300px", // Set your container width
+                          }}
+                        >
+                          {user?.about ? user?.about : "No messages to show"}
+                        </span>
                       )}
                     </p>
                   </div>
@@ -309,7 +331,7 @@ const MiddleContainer = () => {
         <div className="xl:hidden flex flex-col overflow-y-auto ml-2 mr-2 bg-white">
           {/* Cards area */}
           <div className="flex-1">
-            {/* Card 1 */}
+            {/* <!-- card 1 --> */}
             {filteredUsers.map((user) => (
               <div
                 key={user.id}
@@ -385,11 +407,33 @@ const MiddleContainer = () => {
                           {!user.lastMessage.audio &&
                             !user.lastMessage.file &&
                             user.lastMessage.text && (
-                              <span>{user.lastMessage.text}</span>
+                              <span
+                                style={{
+                                  whiteSpace: "nowrap", // Prevents text from wrapping
+                                  overflow: "hidden", // Hides overflow text
+                                  textOverflow: "ellipsis", // Shows "..." for overflow
+                                  width: "300px", // Set your container width
+                                }}
+                              >
+                                {user.lastMessage.text.length > 50
+                                  ? user.lastMessage.text.substring(0, 50) +
+                                    "..."
+                                  : user.lastMessage.text}
+                              </span>
                             )}
                         </>
                       ) : (
-                        ""
+                        <span
+                          className="text-gray-400"
+                          style={{
+                            whiteSpace: "nowrap", // Prevents text from wrapping
+                            overflow: "hidden", // Hides overflow text
+                            textOverflow: "ellipsis", // Shows "..." for overflow
+                            width: "300px", // Set your container width
+                          }}
+                        >
+                          {user?.about ? user?.about : "No messages to show"}
+                        </span>
                       )}
                     </p>
                   </div>

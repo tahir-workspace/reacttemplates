@@ -80,6 +80,11 @@ export const getMessages = async (req, res) => {
     const userToChatId = parseInt(req.params.id);
     const myId = parseInt(req.user.id);
 
+    // Pagination params
+    const page = parseInt(req.query.page) || 1; // default page 1
+    const limit = 50; // messages per page
+    const skip = (page - 1) * limit;
+
     const messages = await Message.prismaQuery().findMany({
       where: {
         OR: [
@@ -88,6 +93,8 @@ export const getMessages = async (req, res) => {
         ],
       },
       orderBy: { createdAt: "asc" },
+      take: limit,
+      skip: skip,
     });
 
     res.status(200).json(messages);
