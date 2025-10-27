@@ -28,7 +28,7 @@ const config = {
         iceServers: [
           { urls: "stun:stun.l.google.com:19302" },
           {
-            urls: "turn:relay1.expressturn.com:3480",
+            urls: "turn:relay1.expressturn.com:443",
             username: "000000002076608780",
             credential: "K2zZsrBRUg+iIHdev1W4fy1XeTM=",
           },
