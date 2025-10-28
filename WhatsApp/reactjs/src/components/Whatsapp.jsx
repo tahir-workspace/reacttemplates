@@ -168,6 +168,8 @@ const Whatsapp = () => {
                 backgroundImage: "url('/background.jpg')",
                 backgroundRepeat: "repeat",
                 backgroundSize: "450px",
+                WebkitOverflowScrolling: "touch",
+                height: "100dvh",
               }}
             >
               {isLoading && (
@@ -263,8 +265,11 @@ const Whatsapp = () => {
                                 setDeleteId(message.id);
                                 setShowConfirm(true);
                               }}
-                              className="absolute top-[-5px] right-[-2px] opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="absolute -top-4 -right-4 p-2 rounded-full  opacity-0 group-hover:opacity-100 "
                               title="Delete message"
+                              style={{
+                                touchAction: "manipulation",
+                              }}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
