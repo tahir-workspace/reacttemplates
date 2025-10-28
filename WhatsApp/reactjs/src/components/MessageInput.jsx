@@ -178,9 +178,7 @@ const MessageInput = () => {
                 <Mic
                   size={22}
                   className={`transition-all ${
-                    isRecording
-                      ? "text-red-600 drop-shadow-[0_0_6px_rgba(255,0,0,0.8)] animate-pulse"
-                      : "text-gray-700"
+                    isRecording ? "text-red-600" : "text-gray-700"
                   }`}
                 />
               </div>
