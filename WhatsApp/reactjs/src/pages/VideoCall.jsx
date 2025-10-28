@@ -394,9 +394,9 @@ const VideoCall = ({
 
         {/* Controls */}
         <div
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-6 items-center"
+          className="fixed left-1/2 -translate-x-1/2 flex gap-6 items-center"
           style={{
-            bottom: `calc(1.5rem + env(safe-area-inset-bottom))`, // 1.5rem = bottom-6
+            bottom: "calc(1.5rem + env(safe-area-inset-bottom))",
           }}
         >
           <button
