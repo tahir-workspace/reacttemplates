@@ -393,7 +393,12 @@ const VideoCall = ({
         </div>
 
         {/* Controls */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-6 items-center">
+        <div
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-6 items-center"
+          style={{
+            bottom: `calc(1.5rem + env(safe-area-inset-bottom))`, // 1.5rem = bottom-6
+          }}
+        >
           <button
             onClick={toggleVideo}
             className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition transform hover:scale-105 ${
