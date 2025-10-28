@@ -265,7 +265,7 @@ const Whatsapp = () => {
                                 setDeleteId(message.id);
                                 setShowConfirm(true);
                               }}
-                              className="absolute -top-4 -right-4 p-2 rounded-full  opacity-0 group-hover:opacity-100 "
+                              className="absolute -top-8 -right-6 p-5 rounded-full  opacity-0 group-hover:opacity-100 "
                               title="Delete message"
                               style={{
                                 touchAction: "manipulation",
