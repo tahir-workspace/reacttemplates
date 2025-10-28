@@ -151,7 +151,7 @@ const MessageInput = () => {
             className={`absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full 
     ${
       audioBlob || isRecording
-        ? "cursor-not-allowed opacity-50"
+        ? "cursor-not-allowed"
         : "hover:bg-gray-100 cursor-pointer"
     } 
     ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
@@ -193,7 +193,7 @@ const MessageInput = () => {
             className="h-[55px] pl-[55px] pr-[50px] border rounded-full"
             style={{ width: width, backgroundColor: "#FFF" }}
             placeholder={isRecording ? "Recording..." : "Type a message"}
-            disabled={isRecording}
+            // disabled={isRecording}
           />
 
           {/* 🖼 Image preview */}
