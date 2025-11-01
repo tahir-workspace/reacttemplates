@@ -1,2 +1,9 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+html,
+body {
+  height: 100%;
+  overflow: hidden; /* prevent body scroll */
+  -webkit-overflow-scrolling: none;
+}
