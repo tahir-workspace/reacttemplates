@@ -142,6 +142,7 @@ const VideoCall = ({
 
     return async () => {
       try {
+        peerRef.current.destroy();
         stopAllSounds();
         clearInterval(interval);
       } catch (err) {
